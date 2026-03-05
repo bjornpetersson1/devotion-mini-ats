@@ -1,0 +1,35 @@
+import { supabase } from "../../lib/supabase";
+
+export async function loadCandidates() {
+  const { data } = await supabase.from("candidates").select("*");
+  return data || [];
+}
+
+export async function insertCandidate(candidate: {
+  name: string;
+  //email: string;
+  linkedin_url: string;
+  job_id: string;
+}) {
+  const { data, error } = await supabase
+    .from("candidates")
+    .insert(candidate)
+    .select();
+
+  if (error) {
+    console.error("Error saving job:", error);
+    throw error;
+  }
+
+  return data;
+}
+export async function updateCandidate(candidate: {
+  id: string;
+  name?: string;
+  stage?: string;
+}) {
+  const { id, ...updates } = candidate;
+
+  await supabase.from("candidates").update(updates).eq("id", id);
+}
+
