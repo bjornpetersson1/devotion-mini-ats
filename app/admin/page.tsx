@@ -1,4 +1,9 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+
 export default function Admin() {
+  const router = useRouter();
 
   return (
     <div className="p-10">
@@ -6,7 +11,7 @@ export default function Admin() {
       <button onClick={() => alert("Not implemented yet")}>
         View Costumers
       </button>
-      <button onClick={() => alert("Not implemented yet")}>
+      <button onClick={() => router.push("/adminCreateCustomerProfile")}>
         Create Costumer
       </button>
       {/* <button onClick={() => alert("Not implemented yet")}>View Jobs</button>

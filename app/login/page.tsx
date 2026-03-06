@@ -41,6 +41,11 @@ export default function LoginPage() {
     console.log("User profile:", profile);
 
     localStorage.setItem("userProfile", JSON.stringify(profile));
+    if (profile.role === "admin") {
+      router.push("/admin");
+    } else {
+      router.push("/kanbanJobs");
+    }
   };
 
   return (

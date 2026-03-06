@@ -1,5 +1,8 @@
 "use client";
 import { useState } from "react";
+import { supabase } from "../../lib/supabase";
+import { insertCustomer } from "../services/costumerService";
+import { updateProfile } from "../services/profileService";
 
 export default function AdminCreateCustomer() {
   const [name, setName] = useState("");
@@ -7,16 +10,30 @@ export default function AdminCreateCustomer() {
   const [message, setMessage] = useState("");
 
   const createCustomer = async () => {
-    const res = await fetch("/api/create-customer", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email }),
-    });
+    try {
+      const res = await fetch("/api/create-user", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim() }),
+      });
+      const userData = await res.json();
+      if (!userData.user) {
+        setMessage(userData.error || "Failed to create user");
+        return;
+      }
 
-    const data = await res.json();
+      const profileId = userData.user.id;
+      const customerData = await insertCustomer({ name });
 
-    if (data.error) setMessage(`Error: ${data.error}`);
-    else setMessage(`Customer created: ${data.profile[0].username}`);
+      const customerId = customerData[0].id;
+
+      await updateProfile({ id: profileId, customer_id: customerId });
+
+      setMessage("Customer and profile linked successfully!");
+    } catch (err) {
+      console.error(err);
+      setMessage("Network or server error");
+    }
   };
 
   return (
