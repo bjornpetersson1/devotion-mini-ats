@@ -13,6 +13,11 @@ type Candidate = {
 };
 
 type Customer = {
-  id: string;
   name: string;
+};
+
+type Profile = {
+  id: string;
+  email: string;
+  customer_id: string;
 };

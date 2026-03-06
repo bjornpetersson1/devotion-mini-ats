@@ -20,10 +20,27 @@ export default function LoginPage() {
     if (error) {
       setErrorMsg(error.message);
       console.error("Login error:", error.message);
-    } else {
-      console.log("User logged in:", data.user);
-      router.push("/costumer");
+      return;
     }
+
+    const user = data.user;
+    console.log("User logged in:", user);
+
+    const { data: profile, error: profileError } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", user.id)
+      .single();
+
+    if (profileError) {
+      console.error("Profile fetch error:", profileError.message);
+      setErrorMsg("Could not fetch profile, consider createing one.");
+      return;
+    }
+
+    console.log("User profile:", profile);
+
+    localStorage.setItem("userProfile", JSON.stringify(profile));
   };
 
   return (

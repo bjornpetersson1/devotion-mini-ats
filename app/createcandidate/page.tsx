@@ -29,13 +29,6 @@ export default function CreateJob() {
         onChange={(e) => setName(e.target.value)}
         className="border p-2 w-full mb-4"
       />
-      {/* <input
-        type="email"
-        placeholder="Candidate Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        className="border p-2 w-full mb-4"
-      /> */}
 
       <input
         type="url"
