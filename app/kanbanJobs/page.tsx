@@ -6,6 +6,14 @@ import { loadKanban } from "../services/kanbanService";
 export default function KanbanJobs() {
   const [jobs, setJobs] = useState<any[]>([]);
   const [candidates, setCandidates] = useState<any[]>([]);
+  const stageColors: Record<string, string> = {
+    applied: "bg-blue-100",
+    screening: "bg-yellow-100",
+    interview: "bg-purple-100",
+    offer: "bg-green-100",
+    hired: "bg-emerald-200",
+    rejected: "bg-red-200",
+  };
 
   useEffect(() => {
     async function fetchData() {
@@ -28,7 +36,7 @@ export default function KanbanJobs() {
             .map((candidate) => (
               <div
                 key={candidate.id}
-                className="bg-white p-3 mb-3 rounded shadow"
+                className={`${stageColors[candidate.stage]} p-3 mb-3 rounded shadow`}
               >
                 <p className="font-semibold">{candidate.name}</p>
                 <p>{candidate.stage}</p>
