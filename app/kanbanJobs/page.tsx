@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { loadKanban } from "../services/kanbanService";
+import { useRouter } from "next/navigation";
 
 export default function KanbanJobs() {
   const [jobs, setJobs] = useState<any[]>([]);
   const [candidates, setCandidates] = useState<any[]>([]);
+  const router = useRouter();
   const stageColors: Record<string, string> = {
     applied: "bg-blue-100",
     screening: "bg-yellow-100",
@@ -14,7 +16,9 @@ export default function KanbanJobs() {
     hired: "bg-emerald-200",
     rejected: "bg-red-200",
   };
-
+  function viewCandidates(jobId: string) {
+    router.push(`/kanbanJobs/${jobId}`);
+  }
   useEffect(() => {
     async function fetchData() {
       const { jobs, candidates } = await loadKanban();
@@ -28,7 +32,11 @@ export default function KanbanJobs() {
   return (
     <div className="flex gap-6 overflow-x-auto p-6">
       {jobs.map((job) => (
-        <div key={job.id} className="min-w-[250px] bg-gray-100 p-4 rounded">
+        <div
+          onClick={() => viewCandidates(job.id)}
+          key={job.id}
+          className="min-w-[250px] bg-gray-100 p-4 rounded"
+        >
           <h2 className="font-bold mb-4">{job.title}</h2>
 
           {candidates

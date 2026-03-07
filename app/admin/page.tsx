@@ -11,17 +11,10 @@ export default function Admin() {
       <button onClick={() => alert("Not implemented yet")}>
         View Costumers
       </button>
-      <button onClick={() => router.push("/adminCreateCustomerProfile")}>
-        Create Costumer
+      <button onClick={() => router.push("/admin/adminCreateCustomerProfile")}>
+        Create new user
       </button>
-      {/* <button onClick={() => alert("Not implemented yet")}>View Jobs</button>
-      <button onClick={() => alert("Not implemented yet")}>
-        View Candidates
-      </button>
-      <button onClick={() => alert("Not implemented yet")}>Add Job</button>
-      <button onClick={() => alert("Not implemented yet")}>
-        Add Candidate
-      </button> */}
+      <button onClick={() => alert("Not implemented yet")}>View Jobs</button>
     </div>
   );
 }

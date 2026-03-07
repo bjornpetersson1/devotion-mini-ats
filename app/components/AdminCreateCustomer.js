@@ -8,13 +8,19 @@ export default function AdminCreateCustomer() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [role, setRole] = useState("user");
 
   const createCustomer = async () => {
     try {
+      const body =
+        role === "admin"
+          ? { email: email.trim(), role }
+          : { email: email.trim(), role, name: name.trim() };
+
       const res = await fetch("/api/create-user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email.trim() }),
+        body: JSON.stringify(body),
       });
       const userData = await res.json();
       if (!userData.user) {
@@ -22,12 +28,15 @@ export default function AdminCreateCustomer() {
         return;
       }
 
-      const profileId = userData.user.id;
-      const customerData = await insertCustomer({ name });
+      if (role !== "admin") {
+        const profileId = userData.user.id;
 
-      const customerId = customerData[0].id;
+        const customerData = await insertCustomer({ name });
 
-      await updateProfile({ id: profileId, customer_id: customerId });
+        const customerId = customerData[0].id;
+
+        await updateProfile({ id: profileId, customer_id: customerId });
+      }
 
       setMessage("Customer and profile linked successfully!");
     } catch (err) {
@@ -38,21 +47,32 @@ export default function AdminCreateCustomer() {
 
   return (
     <div style={{ maxWidth: 400, margin: "50px auto" }}>
-      <h1>Create Customer Profile</h1>
+      <h1>Create New User</h1>
       <input
         type="text"
-        placeholder="Customer Name"
-        value={name}
+        placeholder="User Name"
+        value={role === "admin" ? "" : name}
+        disabled={role === "admin"}
         onChange={(e) => setName(e.target.value)}
-        className="border p-2 w-full mb-4"
+        className={`border p-2 w-full mb-4 ${
+          role === "admin" ? "bg-gray-200" : ""
+        }`}
       />
       <input
         type="email"
-        placeholder="Customer Email"
+        placeholder="User Email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         className="border p-2 w-full mb-4"
       />
+      <select
+        value={role}
+        onChange={(e) => setRole(e.target.value)}
+        className="border p-2 w-full mb-4"
+      >
+        <option value="user">User</option>
+        <option value="admin">Admin</option>
+      </select>
       <button
         onClick={createCustomer}
         className="bg-blue-500 text-white px-4 py-2"
