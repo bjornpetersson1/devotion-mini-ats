@@ -3,11 +3,15 @@
 import { useEffect, useState } from "react";
 import { loadKanban } from "../services/kanbanService";
 import { useRouter } from "next/navigation";
+import getCurrentUser from "../services/userService";
+import useAuthUser from "../services/userService";
 
 export default function KanbanJobs() {
   const [jobs, setJobs] = useState<any[]>([]);
   const [candidates, setCandidates] = useState<any[]>([]);
   const router = useRouter();
+  const user = useAuthUser();
+
   const stageColors: Record<string, string> = {
     applied: "bg-blue-100",
     screening: "bg-yellow-100",
@@ -21,13 +25,14 @@ export default function KanbanJobs() {
   }
   useEffect(() => {
     async function fetchData() {
-      const { jobs, candidates } = await loadKanban();
+      if (!user) return;
+      const { jobs, candidates } = await loadKanban(user);
       setJobs(jobs || []);
       setCandidates(candidates || []);
     }
 
     fetchData();
-  }, []);
+  }, [user]);
 
   return (
     <div className="flex gap-6 overflow-x-auto p-6">

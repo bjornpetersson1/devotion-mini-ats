@@ -44,7 +44,7 @@ export default function LoginPage() {
     if (profile.role === "admin") {
       router.push("/admin");
     } else {
-      router.push("/kanbanJobs");
+      router.push("/user");
     }
   };
 

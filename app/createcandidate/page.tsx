@@ -2,22 +2,24 @@
 import { useEffect, useState } from "react";
 import { insertCandidate } from "../services/candidateService";
 import { loadJobs } from "../services/jobService";
+import getCurrentUser from "../services/userService";
+import useAuthUser from "../services/userService";
 
-export default function CreateJob() {
+export default function createCandidate() {
   const [name, setName] = useState("");
   const [linkedinUrl, setLinkedinUrl] = useState("");
-  //const [email, setEmail] = useState("");
   const [jobs, setJobs] = useState<any[]>([]);
   const [jobId, setJobId] = useState("");
-
+  const user = useAuthUser();
   useEffect(() => {
     async function fetchJobs() {
-      const data = await loadJobs();
+      if (!user) return;
+      const data = await loadJobs(user);
       setJobs(data);
     }
 
     fetchJobs();
-  }, []);
+  }, [user]);
 
   return (
     <div>

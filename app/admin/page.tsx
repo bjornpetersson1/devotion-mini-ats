@@ -14,7 +14,7 @@ export default function Admin() {
       <button onClick={() => router.push("/admin/adminCreateCustomerProfile")}>
         Create new user
       </button>
-      <button onClick={() => alert("Not implemented yet")}>View Jobs</button>
+      <button onClick={() => router.push("/kanbanJobs")}>View Jobs</button>
     </div>
   );
 }

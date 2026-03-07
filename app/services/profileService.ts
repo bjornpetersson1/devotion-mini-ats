@@ -5,6 +5,15 @@ export async function loadProfiles() {
   return data || [];
 }
 
+export async function loadProfileById(id: string) {
+  const { data } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("id", id)
+    .single();
+  return data || [];
+}
+
 export async function insertProfile(profile: { email: string }) {
   const { data, error } = await supabase
     .from("profiles")
