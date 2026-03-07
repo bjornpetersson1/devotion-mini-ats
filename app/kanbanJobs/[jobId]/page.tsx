@@ -6,6 +6,7 @@ import { loadKanban, updateCandidateStage } from "../../services/kanbanService";
 import { DndContext, useDraggable, useDroppable } from "@dnd-kit/core";
 import getCurrentUser from "@/app/services/userService";
 import useAuthUser from "@/app/services/userService";
+import { getJobById } from "@/app/services/jobService";
 
 function DraggableCandidate({ candidate, color }: any) {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
@@ -55,6 +56,7 @@ export default function JobKanban() {
   const params = useParams();
   const jobId = params.jobId;
   const [candidates, setCandidates] = useState<any[]>([]);
+  const [job, setJob] = useState<any>(null);
   const user = useAuthUser();
 
   const stages = [
@@ -94,12 +96,15 @@ export default function JobKanban() {
       if (!user) return;
       const { candidates } = await loadKanban(user);
       setCandidates(candidates.filter((c) => c.job_id === jobId) || []);
+      const currentJob = await getJobById(String(jobId));
+      setJob(currentJob);
     }
     fetchData();
   }, [jobId, user]);
 
   return (
     <DndContext onDragEnd={handleDragEnd}>
+      <h2>{job?.title}</h2>
       <div className="flex gap-2 overflow-x-auto p-6">
         {stages.map((stage) => (
           <DroppableStage key={stage} stage={stage}>

@@ -60,3 +60,17 @@ export async function insertJob(job: { title: string; description: string }) {
 
   return data;
 }
+export async function getJobById(jobId: string) {
+  const { data, error } = await supabase
+    .from("jobs")
+    .select("*")
+    .eq("id", jobId)
+    .single();
+
+  if (error) {
+    console.error("Error fetching job:", error);
+    throw error;
+  }
+
+  return data;
+}

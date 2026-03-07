@@ -3,14 +3,19 @@
 import { useEffect, useState } from "react";
 import { loadKanban } from "../services/kanbanService";
 import { useRouter } from "next/navigation";
-import getCurrentUser from "../services/userService";
+import getCurrentUser, {
+  getCurrentCostumer,
+  getCurrentProfile,
+} from "../services/userService";
 import useAuthUser from "../services/userService";
+import { supabase } from "@/lib/supabase";
 
 export default function KanbanJobs() {
   const [jobs, setJobs] = useState<any[]>([]);
   const [candidates, setCandidates] = useState<any[]>([]);
   const router = useRouter();
   const user = useAuthUser();
+  const [currentCostumer, setCurrentCostumer] = useState<any>(null);
 
   const stageColors: Record<string, string> = {
     applied: "bg-blue-100",
@@ -27,7 +32,18 @@ export default function KanbanJobs() {
     async function fetchData() {
       if (!user) return;
       const { jobs, candidates } = await loadKanban(user);
-      setJobs(jobs || []);
+      const customerIds = jobs
+        .map((j) => j.customer_id)
+        .filter((id) => id != null);
+      const { data: customers } = await supabase
+        .from("customers")
+        .select("*")
+        .in("id", customerIds);
+      const jobsWithCustomer = jobs.map((job) => {
+        const customer = customers?.find((c) => c.id === job.customer_id);
+        return { ...job, customer };
+      });
+      setJobs(jobsWithCustomer || []);
       setCandidates(candidates || []);
     }
 
@@ -43,6 +59,7 @@ export default function KanbanJobs() {
           className="min-w-[250px] bg-gray-100 p-4 rounded"
         >
           <h2 className="font-bold mb-4">{job.title}</h2>
+          <h3>{job.customer?.name}</h3>
 
           {candidates
             .filter((c) => c.job_id === job.id)
