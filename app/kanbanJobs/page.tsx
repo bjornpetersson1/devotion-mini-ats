@@ -11,6 +11,7 @@ import useAuthUser from "../services/userService";
 import { supabase } from "@/lib/supabase";
 
 export default function KanbanJobs() {
+  const [search, setSearch] = useState("");
   const [jobs, setJobs] = useState<any[]>([]);
   const [candidates, setCandidates] = useState<any[]>([]);
   const router = useRouter();
@@ -50,36 +51,68 @@ export default function KanbanJobs() {
   }, [user]);
 
   return (
-    <div className="flex gap-6 overflow-x-auto p-6">
-      {jobs.map((job) => (
-        <div
-          onClick={() => viewCandidates(job.id)}
-          key={job.id}
-          className="min-w-[250px] bg-gray-100 p-4 rounded"
-        >
-          <h2 className="font-bold mb-4">{job.title}</h2>
-          <h3>{job.customer?.name}</h3>
+    <div>
+      <div className="mb-4">
+        <input
+          type="text"
+          placeholder="🔎 Search..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="border p-2 rounded w-full"
+        />
+      </div>
+      <div className="flex gap-6 overflow-x-auto p-6">
+        {jobs
+          .filter((job) => {
+            const jobMatch = job.title
+              .toLowerCase()
+              .includes(search.toLowerCase());
 
-          {candidates
-            .filter((c) => c.job_id === job.id)
-            .map((candidate) => (
-              <div
-                key={candidate.id}
-                className={`${stageColors[candidate.stage]} p-3 mb-3 rounded shadow`}
-              >
-                <p className="font-semibold">{candidate.name}</p>
-                <p>{candidate.stage}</p>
-                <a
-                  href={candidate.linkedin_url}
-                  target="_blank"
-                  className="text-blue-500 text-sm"
-                >
-                  LinkedIn
-                </a>
-              </div>
-            ))}
-        </div>
-      ))}
+            const customerMatch = job.customer?.name
+              ?.toLowerCase()
+              .includes(search.toLowerCase());
+
+            const candidateMatch = candidates.some(
+              (c) =>
+                c.job_id === job.id &&
+                c.name.toLowerCase().includes(search.toLowerCase()),
+            );
+
+            return jobMatch || customerMatch || candidateMatch;
+          })
+          .map((job) => (
+            <div
+              onClick={() => viewCandidates(job.id)}
+              key={job.id}
+              className="min-w-[250px] bg-gray-100 p-4 rounded"
+            >
+              <h2 className="font-bold mb-4">{job.title}</h2>
+              <h3>{job.customer?.name}</h3>
+
+              {candidates
+                .filter((c) => c.job_id === job.id)
+                .filter((c) =>
+                  c.name.toLowerCase().includes(search.toLowerCase()),
+                )
+                .map((candidate) => (
+                  <div
+                    key={candidate.id}
+                    className={`${stageColors[candidate.stage]} p-3 mb-3 rounded shadow`}
+                  >
+                    <p className="font-semibold">{candidate.name}</p>
+                    <p>{candidate.stage}</p>
+                    <a
+                      href={candidate.linkedin_url}
+                      target="_blank"
+                      className="text-blue-500 text-sm"
+                    >
+                      LinkedIn
+                    </a>
+                  </div>
+                ))}
+            </div>
+          ))}
+      </div>
     </div>
   );
 }

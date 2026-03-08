@@ -2,6 +2,7 @@ import { supabase } from "../../lib/supabase";
 
 export async function loadCustomers() {
   const { data } = await supabase.from("customers").select("*");
+  console.log("Customers from DB:", data);
   return data || [];
 }
 

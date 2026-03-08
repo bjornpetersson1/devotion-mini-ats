@@ -80,15 +80,14 @@ export async function getJobById(jobId: string) {
 }
 
 export async function getJobsByCustomerId(CustomerId: string) {
-  const { data, error } = await supabase
+  const { data } = await supabase
     .from("jobs")
     .select("*")
     .eq("customer_id", CustomerId);
 
-  if (error) {
-    console.error("Error fetching jobs for customer:", error);
+  if (!data) {
     return [];
+  } else {
+    return data;
   }
-
-  return data;
 }

@@ -20,7 +20,7 @@ export default function createCandidate() {
       setCustomers(data);
     }
     fetchCustomers();
-  }, [user]);
+  }, []);
   useEffect(() => {
     async function fetchJobs() {
       const data = await getJobsByCustomerId(customerId);
