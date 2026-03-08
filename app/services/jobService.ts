@@ -50,7 +50,11 @@ export async function loadJobs(user: any) {
   }
 }
 
-export async function insertJob(job: { title: string; description: string, customer_id: string }) {
+export async function insertJob(job: {
+  title: string;
+  description: string;
+  customer_id: string;
+}) {
   const { data, error } = await supabase.from("jobs").insert(job).select();
 
   if (error) {
@@ -70,6 +74,20 @@ export async function getJobById(jobId: string) {
   if (error) {
     console.error("Error fetching job:", error);
     throw error;
+  }
+
+  return data;
+}
+
+export async function getJobsByCustomerId(CustomerId: string) {
+  const { data, error } = await supabase
+    .from("jobs")
+    .select("*")
+    .eq("customer_id", CustomerId);
+
+  if (error) {
+    console.error("Error fetching jobs for customer:", error);
+    return [];
   }
 
   return data;

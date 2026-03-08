@@ -47,10 +47,18 @@ export default function AdminCreateCustomer() {
 
   return (
     <div style={{ maxWidth: 400, margin: "50px auto" }}>
-      <h1>Create New User</h1>
+      <h1>Create New</h1>
+      <select
+        value={role}
+        onChange={(e) => setRole(e.target.value)}
+        className="border p-2 w-full mb-4"
+      >
+        <option value="user">Customer</option>
+        <option value="admin">Admin</option>
+      </select>
       <input
         type="text"
-        placeholder="User Name"
+        placeholder="Customer Name"
         value={role === "admin" ? "" : name}
         disabled={role === "admin"}
         onChange={(e) => setName(e.target.value)}
@@ -60,19 +68,11 @@ export default function AdminCreateCustomer() {
       />
       <input
         type="email"
-        placeholder="User Email"
+        placeholder="Customer/Admin Email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         className="border p-2 w-full mb-4"
       />
-      <select
-        value={role}
-        onChange={(e) => setRole(e.target.value)}
-        className="border p-2 w-full mb-4"
-      >
-        <option value="user">User</option>
-        <option value="admin">Admin</option>
-      </select>
       <button
         onClick={createCustomer}
         className="bg-blue-500 text-white px-4 py-2"
