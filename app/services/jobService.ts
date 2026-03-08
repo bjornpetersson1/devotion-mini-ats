@@ -50,7 +50,7 @@ export async function loadJobs(user: any) {
   }
 }
 
-export async function insertJob(job: { title: string; description: string }) {
+export async function insertJob(job: { title: string; description: string, customer_id: string }) {
   const { data, error } = await supabase.from("jobs").insert(job).select();
 
   if (error) {

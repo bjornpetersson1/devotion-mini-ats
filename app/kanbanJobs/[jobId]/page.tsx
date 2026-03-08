@@ -120,6 +120,7 @@ export default function JobKanban() {
           </DroppableStage>
         ))}
       </div>
+      <h2>{job?.description}</h2>
     </DndContext>
   );
 }

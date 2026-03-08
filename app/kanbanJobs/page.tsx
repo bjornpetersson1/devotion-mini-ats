@@ -15,7 +15,6 @@ export default function KanbanJobs() {
   const [candidates, setCandidates] = useState<any[]>([]);
   const router = useRouter();
   const user = useAuthUser();
-  const [currentCostumer, setCurrentCostumer] = useState<any>(null);
 
   const stageColors: Record<string, string> = {
     applied: "bg-blue-100",
