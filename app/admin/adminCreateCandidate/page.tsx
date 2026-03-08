@@ -2,11 +2,12 @@
 import { use, useEffect, useState } from "react";
 import { insertCandidate } from "../../services/candidateService";
 import { getJobsByCustomerId, loadJobs } from "../../services/jobService";
-import getCurrentUser from "../../services/userService";
 import useAuthUser from "../../services/userService";
 import { loadCustomers } from "@/app/services/costumerService";
+import { useRouter } from "next/navigation";
 
 export default function createCandidate() {
+  const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
   const [linkedinUrl, setLinkedinUrl] = useState("");
   const [jobs, setJobs] = useState<any[]>([]);
@@ -14,23 +15,38 @@ export default function createCandidate() {
   const [customerId, setCustomerId] = useState("");
   const [customers, setCustomers] = useState<any[]>([]);
   const user = useAuthUser();
+  const router = useRouter();
+
   useEffect(() => {
     async function fetchCustomers() {
+      setLoading(true);
       const data = await loadCustomers();
       setCustomers(data);
     }
-    fetchCustomers();
+    fetchCustomers().then(() => setLoading(false));
   }, []);
   useEffect(() => {
     async function fetchJobs() {
+      setLoading(true);
       const data = await getJobsByCustomerId(customerId);
       setJobs(data);
     }
-    fetchJobs();
+    fetchJobs().then(() => setLoading(false));
   }, [customerId]);
 
+  const handleCreateCandidate = async () => {
+    setLoading(true);
+    try {
+      await insertCandidate({ name, linkedin_url: linkedinUrl, job_id: jobId });
+    } catch (error) {
+      console.error("Failed to create candidate", error);
+    } finally {
+      router.push("/admin");
+      setLoading(false);
+    }
+  };
   return (
-    <div>
+    <div className={loading ? "cursor-wait" : ""}>
       <h1>Create Candidate</h1>
       <select
         value={customerId}
@@ -70,9 +86,7 @@ export default function createCandidate() {
       />
 
       <button
-        onClick={() =>
-          insertCandidate({ name, linkedin_url: linkedinUrl, job_id: jobId })
-        }
+        onClick={() => handleCreateCandidate()}
         className="bg-blue-500 text-white px-4 py-2"
       >
         Create Candidate

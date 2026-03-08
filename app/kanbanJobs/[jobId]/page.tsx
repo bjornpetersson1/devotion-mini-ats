@@ -53,6 +53,7 @@ function DroppableStage({ stage, children, className }: any) {
 }
 
 export default function JobKanban() {
+  const [loading, setLoading] = useState(false);
   const params = useParams();
   const jobId = params.jobId;
   const [candidates, setCandidates] = useState<any[]>([]);
@@ -93,34 +94,37 @@ export default function JobKanban() {
   };
   useEffect(() => {
     async function fetchData() {
+      setLoading(true);
       if (!user) return;
       const { candidates } = await loadKanban(user);
       setCandidates(candidates.filter((c) => c.job_id === jobId) || []);
       const currentJob = await getJobById(String(jobId));
       setJob(currentJob);
     }
-    fetchData();
+    fetchData().then(() => setLoading(false));
   }, [jobId, user]);
 
   return (
-    <DndContext onDragEnd={handleDragEnd}>
-      <h2>{job?.title}</h2>
-      <div className="flex gap-2 overflow-x-auto p-6">
-        {stages.map((stage) => (
-          <DroppableStage key={stage} stage={stage} className="candidateCard">
-            {candidates
-              .filter((c) => c.stage === stage)
-              .map((c) => (
-                <DraggableCandidate
-                  key={c.id}
-                  candidate={c}
-                  color={`${stageColors[c.stage]} border-l-4 p-3 mb-3 rounded shadow bg-[#30363d]`}
-                />
-              ))}
-          </DroppableStage>
-        ))}
-      </div>
-      <h2>{job?.description}</h2>
-    </DndContext>
+    <div className={loading ? "cursor-wait" : ""}>
+      <DndContext onDragEnd={handleDragEnd}>
+        <h2>{job?.title}</h2>
+        <div className="flex gap-2 overflow-x-auto p-6">
+          {stages.map((stage) => (
+            <DroppableStage key={stage} stage={stage} className="candidateCard">
+              {candidates
+                .filter((c) => c.stage === stage)
+                .map((c) => (
+                  <DraggableCandidate
+                    key={c.id}
+                    candidate={c}
+                    color={`${stageColors[c.stage]} border-l-4 p-3 mb-3 rounded shadow bg-[#30363d]`}
+                  />
+                ))}
+            </DroppableStage>
+          ))}
+        </div>
+        <h2>{job?.description}</h2>
+      </DndContext>
+    </div>
   );
 }

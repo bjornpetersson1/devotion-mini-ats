@@ -11,6 +11,7 @@ import useAuthUser from "../services/userService";
 import { supabase } from "@/lib/supabase";
 
 export default function KanbanJobs() {
+  const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
   const [jobs, setJobs] = useState<any[]>([]);
   const [candidates, setCandidates] = useState<any[]>([]);
@@ -30,6 +31,7 @@ export default function KanbanJobs() {
   }
   useEffect(() => {
     async function fetchData() {
+      setLoading(true);
       if (!user) return;
       const { jobs, candidates } = await loadKanban(user);
       const customerIds = jobs
@@ -47,18 +49,18 @@ export default function KanbanJobs() {
       setCandidates(candidates || []);
     }
 
-    fetchData();
+    fetchData().then(() => setLoading(false));
   }, [user]);
 
   return (
-    <div>
+    <div className={loading ? "cursor-wait" : ""}>
       <div className="mb-4">
         <input
           type="text"
           placeholder="🔎 Search..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="border p-2 rounded w-full"
+          className="border p-2 rounded w-full max-w-md mx-auto block"
         />
       </div>
       <div className="flex gap-6 overflow-x-auto p-6">

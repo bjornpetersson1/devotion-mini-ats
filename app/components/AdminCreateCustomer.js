@@ -3,14 +3,18 @@ import { useState } from "react";
 import { supabase } from "../../lib/supabase";
 import { insertCustomer } from "../services/costumerService";
 import { updateProfile } from "../services/profileService";
+import { useRouter } from "next/navigation";
 
 export default function AdminCreateCustomer() {
+  const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [role, setRole] = useState("user");
+  const router = useRouter();
 
   const createCustomer = async () => {
+    setLoading(true);
     try {
       const body =
         role === "admin"
@@ -25,6 +29,7 @@ export default function AdminCreateCustomer() {
       const userData = await res.json();
       if (!userData.user) {
         setMessage(userData.error || "Failed to create user");
+        setLoading(false);
         return;
       }
 
@@ -39,47 +44,58 @@ export default function AdminCreateCustomer() {
       }
 
       setMessage("Customer and profile linked successfully!");
+      setLoading(false);
     } catch (err) {
       console.error(err);
       setMessage("Network or server error");
+      setLoading(false);
     }
   };
+  async function handleCreateCustomer() {
+    try {
+      await createCustomer();
+      router.push("/admin");
+    } catch (error) {
+      console.error("Failed to create customer", error);
+    }
+  }
 
   return (
-    <div style={{ maxWidth: 400, margin: "50px auto" }}>
-      <h1>Create New</h1>
-      <select
-        value={role}
-        onChange={(e) => setRole(e.target.value)}
-        className="border p-2 w-full mb-4"
-      >
-        <option value="user">Customer</option>
-        <option value="admin">Admin</option>
-      </select>
-      <input
-        type="text"
-        placeholder="Customer Name"
-        value={role === "admin" ? "" : name}
-        disabled={role === "admin"}
-        onChange={(e) => setName(e.target.value)}
-        className={`border p-2 w-full mb-4 ${
-          role === "admin" ? "bg-gray-200" : ""
-        }`}
-      />
-      <input
-        type="email"
-        placeholder="Customer/Admin Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        className="border p-2 w-full mb-4"
-      />
-      <button
-        onClick={createCustomer}
-        className="bg-blue-500 text-white px-4 py-2"
-      >
-        Create Customer
-      </button>
-      {message && <p style={{ marginTop: 10 }}>{message}</p>}
+    <div className={loading ? "cursor-wait" : ""}>
+      <div style={{ maxWidth: 400, margin: "50px auto" }}>
+        <h1>Create New</h1>
+        <select
+          value={role}
+          onChange={(e) => setRole(e.target.value)}
+          className="border p-2 w-full mb-4"
+        >
+          <option value="user">Customer</option>
+          <option value="admin">Admin</option>
+        </select>
+        <input
+          type="text"
+          placeholder="Customer Name"
+          value={role === "admin" ? "" : name}
+          disabled={role === "admin"}
+          onChange={(e) => setName(e.target.value)}
+          className={`border p-2 w-full mb-4 ${
+            role === "admin" ? "bg-gray-200" : ""
+          }`}
+        />
+        <input
+          type="email"
+          placeholder="Customer/Admin Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="border p-2 w-full mb-4"
+        />
+        <button
+          onClick={handleCreateCustomer}
+          className="bg-blue-500 text-white px-4 py-2"
+        >
+          Create Customer
+        </button>
+      </div>
     </div>
   );
 }

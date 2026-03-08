@@ -3,6 +3,38 @@
   align-items: center; /* Vertikal centering */
   gap: 12px; /* Mellanrum mellan elementen */
   padding: 10px 20px;
+  padding-bottom: 0;
   background-color: #30363d; /* Om du vill ha samma mörka färg */
   color: white;
+}
+
+.TopBar button {
+  margin: 0;
+  padding: 0px 10px;
+  color: #e6edf3;
+  background-color: #363d45;
+  border: 1px solid #47515b;
+}
+
+.TopBar button:hover {
+  color: #3fb950;
+  border-color: #3fb950;
+  background-color: #30363d;
+}
+
+.TopBar h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.TopBar h1:hover {
+  color: #3fb950;
+}
+
+.buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  width: 100%;
 }
