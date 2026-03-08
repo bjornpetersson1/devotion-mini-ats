@@ -84,7 +84,7 @@ export default function KanbanJobs() {
             <div
               onClick={() => viewCandidates(job.id)}
               key={job.id}
-              className="min-w-[250px] bg-gray-100 p-4 rounded"
+              className="candidateCard min-w-[250px] bg-gray-100 p-4 rounded"
             >
               <h2 className="font-bold mb-4">{job.title}</h2>
               <h3>{job.customer?.name}</h3>

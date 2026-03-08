@@ -23,12 +23,12 @@ export default function UserStart() {
   }, [user]);
   return (
     <div className="p-10">
-      <h1>{costumer?.name}</h1>
+      <h1>Welcome back, {costumer?.name}</h1>
       <button onClick={() => router.push("/createCandidate")}>
-        Create Candidates
+        Create candidate
       </button>
       <button onClick={() => router.push("/createJob")}>Create new job</button>
-      <button onClick={() => router.push("/kanbanJobs")}>View Jobs</button>
+      <button onClick={() => router.push("/kanbanJobs")}>View jobs</button>
     </div>
   );
 }
