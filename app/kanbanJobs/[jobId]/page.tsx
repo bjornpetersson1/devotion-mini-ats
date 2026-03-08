@@ -31,7 +31,7 @@ function DraggableCandidate({ candidate, color }: any) {
       <a
         href={candidate.linkedin_url}
         target="_blank"
-        className="text-blue-500 text-sm"
+        className="text-[#3fb950] text-sm"
       >
         LinkedIn
       </a>
@@ -39,14 +39,14 @@ function DraggableCandidate({ candidate, color }: any) {
   );
 }
 
-function DroppableStage({ stage, children }: any) {
+function DroppableStage({ stage, children, className }: any) {
   const { setNodeRef } = useDroppable({
     id: stage,
   });
 
   return (
-    <div ref={setNodeRef} className="min-w-[250px] bg-gray-100 p-4 rounded">
-      <h2 className="font-bold mb-4">{stage}</h2>
+    <div ref={setNodeRef} className={className}>
+      <h2>{stage}</h2>
       {children}
     </div>
   );
@@ -69,12 +69,12 @@ export default function JobKanban() {
   ];
 
   const stageColors: Record<string, string> = {
-    applied: "bg-blue-100",
-    screening: "bg-yellow-100",
-    interview: "bg-purple-100",
-    offer: "bg-green-100",
-    hired: "bg-emerald-200",
-    rejected: "bg-red-200",
+    applied: "border border-blue-400",
+    screening: "border border-yellow-400",
+    interview: "border border-purple-400",
+    offer: "border border-green-400",
+    hired: "border border-emerald-400",
+    rejected: "border border-red-400",
   };
 
   const handleDragEnd = async (event: any) => {
@@ -107,14 +107,14 @@ export default function JobKanban() {
       <h2>{job?.title}</h2>
       <div className="flex gap-2 overflow-x-auto p-6">
         {stages.map((stage) => (
-          <DroppableStage key={stage} stage={stage}>
+          <DroppableStage key={stage} stage={stage} className="candidateCard">
             {candidates
               .filter((c) => c.stage === stage)
               .map((c) => (
                 <DraggableCandidate
                   key={c.id}
                   candidate={c}
-                  color={stageColors[c.stage]}
+                  color={`${stageColors[c.stage]} border-l-4 p-3 mb-3 rounded shadow bg-[#30363d]`}
                 />
               ))}
           </DroppableStage>

@@ -39,11 +39,7 @@ export default function createCandidate() {
         onChange={(e) => setLinkedinUrl(e.target.value)}
         className="border p-2 w-full mb-4"
       />
-      <select
-        value={jobId}
-        onChange={(e) => setJobId(e.target.value)}
-        className="border p-2 w-full mb-4"
-      >
+      <select value={jobId} onChange={(e) => setJobId(e.target.value)}>
         <option value="">Select job</option>
 
         {jobs.map((job) => (

@@ -35,7 +35,6 @@ export default function createCandidate() {
       <select
         value={customerId}
         onChange={(e) => setCustomerId(e.target.value)}
-        className="border p-2 w-full mb-4"
       >
         <option value="">Select customer</option>
 
@@ -45,11 +44,7 @@ export default function createCandidate() {
           </option>
         ))}
       </select>
-      <select
-        value={jobId}
-        onChange={(e) => setJobId(e.target.value)}
-        className="border p-2 w-full mb-4"
-      >
+      <select value={jobId} onChange={(e) => setJobId(e.target.value)}>
         <option value="">Select job</option>
 
         {jobs.map((job) => (

@@ -18,12 +18,12 @@ export default function KanbanJobs() {
   const user = useAuthUser();
 
   const stageColors: Record<string, string> = {
-    applied: "bg-blue-100",
-    screening: "bg-yellow-100",
-    interview: "bg-purple-100",
-    offer: "bg-green-100",
-    hired: "bg-emerald-200",
-    rejected: "bg-red-200",
+    applied: "border border-blue-400",
+    screening: "border border-yellow-400",
+    interview: "border border-purple-400",
+    offer: "border border-green-400",
+    hired: "border border-emerald-400",
+    rejected: "border border-red-400",
   };
   function viewCandidates(jobId: string) {
     router.push(`/kanbanJobs/${jobId}`);
@@ -84,9 +84,9 @@ export default function KanbanJobs() {
             <div
               onClick={() => viewCandidates(job.id)}
               key={job.id}
-              className="candidateCard min-w-[250px] bg-gray-100 p-4 rounded"
+              className="candidateCard"
             >
-              <h2 className="font-bold mb-4">{job.title}</h2>
+              <h2>{job.title}</h2>
               <h3>{job.customer?.name}</h3>
 
               {candidates
@@ -97,14 +97,14 @@ export default function KanbanJobs() {
                 .map((candidate) => (
                   <div
                     key={candidate.id}
-                    className={`${stageColors[candidate.stage]} p-3 mb-3 rounded shadow`}
+                    className={`${stageColors[candidate.stage]} border-l-4 p-3 mb-3 rounded shadow`}
                   >
                     <p className="font-semibold">{candidate.name}</p>
                     <p>{candidate.stage}</p>
                     <a
                       href={candidate.linkedin_url}
                       target="_blank"
-                      className="text-blue-500 text-sm"
+                      className="text-[#3fb950] text-sm"
                     >
                       LinkedIn
                     </a>
