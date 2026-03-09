@@ -36,7 +36,7 @@ export default function ActiveCandidates() {
   };
 
   function viewJob(jobId: string) {
-    router.push(`/kanbanJobs/${jobId}`);
+    router.push(`/kanbanjobs/${jobId}`);
   }
   useEffect(() => {
     if (!user) return;

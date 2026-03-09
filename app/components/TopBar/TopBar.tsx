@@ -59,7 +59,7 @@ export default function TopBar() {
           <button onClick={() => router.push("/candidates")}>
             Active candidates
           </button>
-          <button onClick={() => router.push("/kanbanJobs")}>
+          <button onClick={() => router.push("/kanbanjobs")}>
             Active jobs
           </button>
           <div className="dropdown" ref={dropdownRef}>
@@ -67,14 +67,14 @@ export default function TopBar() {
             {open && (
               <div className="dropdownMenu">
                 <button
-                  onClick={() => navigate("/admin/adminCreateCustomerProfile")}
+                  onClick={() => navigate("/admin/admincreatecustomerprofile")}
                 >
                   User
                 </button>
-                <button onClick={() => navigate("/admin/adminCreateJob")}>
+                <button onClick={() => navigate("/admin/admincreatejob")}>
                   Job
                 </button>
-                <button onClick={() => navigate("/admin/adminCreateCandidate")}>
+                <button onClick={() => navigate("/admin/admincreatecandidate")}>
                   Candidate
                 </button>
               </div>
@@ -90,7 +90,7 @@ export default function TopBar() {
         <h3>{role}</h3>
         <h1 onClick={() => router.push("/user")}>{name}</h1>
         <div className="buttons">
-          <button onClick={() => router.push("/kanbanJobs")}>
+          <button onClick={() => router.push("/kanbanjobs")}>
             View active jobs
           </button>
           <button onClick={() => router.push("/candidates")}>
@@ -100,10 +100,10 @@ export default function TopBar() {
             <button onClick={() => setOpen(!open)}>Create new ▼</button>
             {open && (
               <div className="dropdownMenu">
-                <button onClick={() => navigate("/createCandidate")}>
+                <button onClick={() => navigate("/createcandidate")}>
                   Candidate
                 </button>
-                <button onClick={() => navigate("/createJob")}>Job</button>
+                <button onClick={() => navigate("/createjob")}>Job</button>
               </div>
             )}
           </div>
