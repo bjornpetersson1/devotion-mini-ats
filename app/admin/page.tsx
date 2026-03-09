@@ -9,7 +9,7 @@ export default function Admin() {
     <div className="p-10">
       <h1>Admin</h1>
       <button onClick={() => alert("Not implemented yet")}>
-        View Costumers
+        View Candidates
       </button>
       <br />
       <button onClick={() => router.push("/admin/adminCreateCustomerProfile")}>

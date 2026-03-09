@@ -47,7 +47,7 @@ export default function createCandidate() {
   };
   return (
     <div className={loading ? "cursor-wait" : ""}>
-      <h1>Create Candidate</h1>
+      <h1>New candidate</h1>
       <select
         value={customerId}
         onChange={(e) => setCustomerId(e.target.value)}

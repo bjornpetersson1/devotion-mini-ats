@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useAuthUser, { getCurrentCostumer } from "../../services/userService";
 import { loadProfileById } from "../../services/profileService";
 import { useRouter } from "next/navigation";
@@ -9,7 +9,9 @@ export default function TopBar() {
   const router = useRouter();
   const [role, setRole] = useState("customer");
   const [name, setName] = useState("");
+  const [open, setOpen] = useState(false);
   const user = useAuthUser();
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,29 +27,59 @@ export default function TopBar() {
     };
     fetchData();
   }, [user]);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  function navigate(path: string) {
+    setOpen(false);
+    router.push(path);
+  }
+
   if (name === "Admin") {
     return (
       <div className="TopBar">
         <h3>{role}</h3>
         <h1 onClick={() => router.push("/admin")}>{name}</h1>
         <div className="buttons">
-          <button onClick={() => router.push("/admin/adminCustomers")}>
-            Customers
-          </button>
-          <button
-            onClick={() => router.push("/admin/adminCreateCustomerProfile")}
-          >
-            Create new user
-          </button>
-          <button onClick={() => router.push("/admin/adminCreateJob")}>
-            Create new job
-          </button>
-          <button onClick={() => router.push("/admin/adminCreateCandidate")}>
-            Create new candidate
+          <button onClick={() => router.push("/admin/adminCandidates")}>
+            Active candidates
           </button>
           <button onClick={() => router.push("/kanbanJobs")}>
-            View all jobs
+            Active jobs
           </button>
+          <div className="dropdown" ref={dropdownRef}>
+            <button onClick={() => setOpen(!open)}>Create new ▼</button>
+            {open && (
+              <div className="dropdownMenu">
+                <button
+                  onClick={() => navigate("/admin/adminCreateCustomerProfile")}
+                >
+                  User
+                </button>
+                <button onClick={() => navigate("/admin/adminCreateJob")}>
+                  Job
+                </button>
+                <button onClick={() => navigate("/admin/adminCreateCandidate")}>
+                  Candidate
+                </button>
+              </div>
+            )}
+          </div>
           <button onClick={() => router.push("/")}>Sign out</button>
         </div>
       </div>
@@ -58,14 +90,19 @@ export default function TopBar() {
         <h3>{role}</h3>
         <h1 onClick={() => router.push("/user")}>{name}</h1>
         <div className="buttons">
-        <button onClick={() => router.push("/createCandidate")}>
-          Create candidate
-        </button>
-        <button onClick={() => router.push("/createJob")}>
-          Create new job
-        </button>
-        <button onClick={() => router.push("/kanbanJobs")}>View jobs</button>
-        <button onClick={() => router.push("/")}>Sign out</button>
+          <div className="dropdown" ref={dropdownRef}>
+            <button onClick={() => setOpen(!open)}>Create new ▼</button>
+            {open && (
+              <div className="dropdownMenu">
+                <button onClick={() => navigate("/createCandidate")}>
+                  Candidate
+                </button>
+                <button onClick={() => navigate("/createJob")}>Job</button>
+              </div>
+            )}
+          </div>
+          <button onClick={() => router.push("/kanbanJobs")}>View jobs</button>
+          <button onClick={() => router.push("/")}>Sign out</button>
         </div>
       </div>
     );

@@ -33,3 +33,11 @@ export async function updateCandidate(candidate: {
   await supabase.from("candidates").update(updates).eq("id", id);
 }
 
+export async function updateCandidateNote(id: string, note: string) {
+  const { error } = await supabase
+    .from("candidates")
+    .update({ note })
+    .eq("id", id);
+
+  if (error) throw error;
+}

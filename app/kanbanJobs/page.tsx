@@ -3,10 +3,6 @@
 import { useEffect, useState } from "react";
 import { loadKanban } from "../services/kanbanService";
 import { useRouter } from "next/navigation";
-import getCurrentUser, {
-  getCurrentCostumer,
-  getCurrentProfile,
-} from "../services/userService";
 import useAuthUser from "../services/userService";
 import { supabase } from "@/lib/supabase";
 

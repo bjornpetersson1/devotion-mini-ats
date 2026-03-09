@@ -33,7 +33,7 @@ export default function CreateJob() {
   }, []);
   return (
     <div className={loading ? "cursor-wait" : ""}>
-      <h1>Create Job for Customer</h1>
+      <h1>New job</h1>
       <select
         value={customerId}
         onChange={(e) => setCustomerId(e.target.value)}

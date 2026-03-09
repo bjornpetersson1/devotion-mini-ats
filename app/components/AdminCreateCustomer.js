@@ -63,7 +63,7 @@ export default function AdminCreateCustomer() {
   return (
     <div className={loading ? "cursor-wait" : ""}>
       <div style={{ maxWidth: 400, margin: "50px auto" }}>
-        <h1>Create New</h1>
+        <h1>New user</h1>
         <select
           value={role}
           onChange={(e) => setRole(e.target.value)}

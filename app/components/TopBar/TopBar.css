@@ -38,3 +38,26 @@
   justify-content: flex-end;
   width: 100%;
 }
+
+.dropdown {
+  position: relative;
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: #30363d;
+  border: 1px solid #444;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 150px;
+  z-index: 100;
+}
+
+.dropdownMenu button {
+  text-align: left;
+  width: 100%;
+}

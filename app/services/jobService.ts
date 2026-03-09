@@ -79,6 +79,7 @@ export async function getJobById(jobId: string) {
   return data;
 }
 
+
 export async function getJobsByCustomerId(CustomerId: string) {
   const { data } = await supabase
     .from("jobs")
