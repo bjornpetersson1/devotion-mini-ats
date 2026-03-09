@@ -3,10 +3,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import useAuthUser from "@/app/services/userService";
+import { useRouter } from "next/navigation";
 
 export default function ActiveCandidates() {
   const user = useAuthUser();
-
+  const router = useRouter();
   const [allCandidates, setAllCandidates] = useState<any[]>([]);
   const [jobs, setJobs] = useState<any[]>([]);
   const [customers, setCustomers] = useState<any[]>([]);
@@ -34,6 +35,9 @@ export default function ActiveCandidates() {
     rejected: "text-red-400",
   };
 
+  function viewJob(jobId: string) {
+    router.push(`/kanbanJobs/${jobId}`);
+  }
   useEffect(() => {
     if (!user) return;
 
@@ -164,6 +168,7 @@ export default function ActiveCandidates() {
 
           return (
             <div
+              onClick={() => viewJob(job.id)}
               key={candidate.id}
               className={`${stageColors[candidate.stage]} border-l-4 p-3 mb-3 rounded shadow`}
             >

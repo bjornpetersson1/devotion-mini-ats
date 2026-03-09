@@ -107,7 +107,7 @@ export default function JobKanban() {
   return (
     <div className={loading ? "cursor-wait" : ""}>
       <DndContext onDragEnd={handleDragEnd}>
-        <h2>{job?.title}</h2>
+        <h2 className="text-center text-3xl font-bold">{job?.title}</h2>
         <div className="flex gap-2 overflow-x-auto p-6">
           {stages.map((stage) => (
             <DroppableStage key={stage} stage={stage} className="candidateCard">
@@ -123,7 +123,7 @@ export default function JobKanban() {
             </DroppableStage>
           ))}
         </div>
-        <h2>{job?.description}</h2>
+        <p className="text-center ">{job?.description}</p>
       </DndContext>
     </div>
   );
