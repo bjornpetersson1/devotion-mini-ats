@@ -14,7 +14,7 @@ export default function createCandidate() {
   const [jobId, setJobId] = useState("");
   const [customerId, setCustomerId] = useState("");
   const [customers, setCustomers] = useState<any[]>([]);
-  const user = useAuthUser();
+
   const router = useRouter();
 
   useEffect(() => {
