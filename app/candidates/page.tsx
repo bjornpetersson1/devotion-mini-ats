@@ -168,11 +168,10 @@ export default function ActiveCandidates() {
 
           return (
             <div
-              onClick={() => viewJob(job.id)}
               key={candidate.id}
               className={`${stageColors[candidate.stage]} border-l-4 p-3 mb-3 rounded shadow`}
             >
-              <h3>{candidate.name}</h3>
+              <h3 onClick={() => viewJob(job.id)}>{candidate.name}</h3>
 
               <h4>{customer?.name || ""}</h4>
 
