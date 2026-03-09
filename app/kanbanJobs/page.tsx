@@ -59,7 +59,7 @@ export default function KanbanJobs() {
           className="border p-2 rounded w-full max-w-md mx-auto block"
         />
       </div>
-      <div className="flex gap-6 overflow-x-auto p-6">
+      <div className="flex gap-6 overflow-x-auto p-6 bg-zinc-900 rounded-xl shadow-inner">
         {jobs
           .filter((job) => {
             const jobMatch = job.title

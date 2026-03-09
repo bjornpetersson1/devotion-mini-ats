@@ -22,13 +22,8 @@ export default function UserStart() {
     fetchData();
   }, [user]);
   return (
-    <div className="p-10">
-      <h1>Welcome back, {costumer?.name}</h1>
-      <button onClick={() => router.push("/createCandidate")}>
-        Create candidate
-      </button>
-      <button onClick={() => router.push("/createJob")}>Create new job</button>
-      <button onClick={() => router.push("/kanbanJobs")}>View jobs</button>
-    </div>
+    <h1 className="flex items-center justify-center h-screen text-3xl font-bold">
+      Welcome back, {costumer?.name}
+    </h1>
   );
 }

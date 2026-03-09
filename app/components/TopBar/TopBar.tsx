@@ -56,7 +56,7 @@ export default function TopBar() {
         <h3>{role}</h3>
         <h1 onClick={() => router.push("/admin")}>{name}</h1>
         <div className="buttons">
-          <button onClick={() => router.push("/admin/adminCandidates")}>
+          <button onClick={() => router.push("/candidates")}>
             Active candidates
           </button>
           <button onClick={() => router.push("/kanbanJobs")}>
@@ -90,6 +90,12 @@ export default function TopBar() {
         <h3>{role}</h3>
         <h1 onClick={() => router.push("/user")}>{name}</h1>
         <div className="buttons">
+          <button onClick={() => router.push("/kanbanJobs")}>
+            View active jobs
+          </button>
+          <button onClick={() => router.push("/candidates")}>
+            View active candidates
+          </button>
           <div className="dropdown" ref={dropdownRef}>
             <button onClick={() => setOpen(!open)}>Create new ▼</button>
             {open && (
@@ -101,7 +107,6 @@ export default function TopBar() {
               </div>
             )}
           </div>
-          <button onClick={() => router.push("/kanbanJobs")}>View jobs</button>
           <button onClick={() => router.push("/")}>Sign out</button>
         </div>
       </div>

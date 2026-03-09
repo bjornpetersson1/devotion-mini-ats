@@ -71,7 +71,21 @@ button:hover {
 @import "tailwindcss";
 
 .candidateCard {
-  background-color: #30363d;
+  background-color: #36393f;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  box-shadow:
+    0 4px 8px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
+  border-left: 4px solid var(--accent);
+  transition: box-shadow 0.3s ease;
+}
+
+.candidateCard:hover {
+  box-shadow:
+    0 8px 16px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
+  transform: translateY(-2px);
 }
 
 .candidateCard h2 {
