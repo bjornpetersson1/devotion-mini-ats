@@ -5,7 +5,7 @@ import { insertCustomer } from "../services/costumerService";
 import { updateProfile } from "../services/profileService";
 import { useRouter } from "next/navigation";
 
-export default function AdminCreateCustomer() {
+export default function AdminCreateUser() {
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");

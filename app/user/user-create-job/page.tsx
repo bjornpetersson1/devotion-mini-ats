@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
-import { insertJob } from "../services/jobService";
-import useAuthUser, { getCurrentProfile } from "../services/userService";
+import { insertJob } from "../../services/jobService";
+import useAuthUser, { getCurrentProfile } from "../../services/userService";
 import { useRouter } from "next/navigation";
 export default function CreateJob() {
   const [loading, setLoading] = useState(false);

@@ -23,7 +23,7 @@ export default function KanbanJobs() {
     rejected: "border border-red-400",
   };
   function viewCandidates(jobId: string) {
-    router.push(`/kanbanjobs/${jobId}`);
+    router.push(`/kanban/${jobId}`);
   }
   useEffect(() => {
     async function fetchData() {

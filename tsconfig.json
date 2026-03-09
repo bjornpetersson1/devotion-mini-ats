@@ -28,7 +28,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
-    "**/*.mts"
-, "app/components/AdminCreateCustomer.js"  ],
+    "**/*.mts",
+    "app/components/admin-create-user.js"
+  ],
   "exclude": ["node_modules"]
 }

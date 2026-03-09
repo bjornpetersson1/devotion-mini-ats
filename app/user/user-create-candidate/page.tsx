@@ -1,9 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
-import { insertCandidate } from "../services/candidateService";
-import { loadJobs } from "../services/jobService";
+import { insertCandidate } from "../../services/candidateService";
+import { loadJobs } from "../../services/jobService";
 import { useRouter } from "next/navigation";
-import useAuthUser from "../services/userService";
+import useAuthUser from "../../services/userService";
 
 export default function createCandidate() {
   const router = useRouter();
