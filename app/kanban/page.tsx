@@ -59,57 +59,59 @@ export default function KanbanJobs() {
           className="border p-2 rounded w-full max-w-md mx-auto block"
         />
       </div>
-      <div className="flex gap-6 overflow-x-auto p-6 bg-zinc-900 rounded-xl shadow-inner">
-        {jobs
-          .filter((job) => {
-            const jobMatch = job.title
-              .toLowerCase()
-              .includes(search.toLowerCase());
+      <div className="flex justify-center">
+        <div className="flex gap-6 overflow-x-auto p-6 rounded-xl shadow-inner">
+          {jobs
+            .filter((job) => {
+              const jobMatch = job.title
+                .toLowerCase()
+                .includes(search.toLowerCase());
 
-            const customerMatch = job.customer?.name
-              ?.toLowerCase()
-              .includes(search.toLowerCase());
+              const customerMatch = job.customer?.name
+                ?.toLowerCase()
+                .includes(search.toLowerCase());
 
-            const candidateMatch = candidates.some(
-              (c) =>
-                c.job_id === job.id &&
-                c.name.toLowerCase().includes(search.toLowerCase()),
-            );
-
-            return jobMatch || customerMatch || candidateMatch;
-          })
-          .map((job) => (
-            <div
-              onClick={() => viewCandidates(job.id)}
-              key={job.id}
-              className="candidateCard"
-            >
-              <h2>{job.title}</h2>
-              <h3>{job.customer?.name}</h3>
-
-              {candidates
-                .filter((c) => c.job_id === job.id)
-                .filter((c) =>
+              const candidateMatch = candidates.some(
+                (c) =>
+                  c.job_id === job.id &&
                   c.name.toLowerCase().includes(search.toLowerCase()),
-                )
-                .map((candidate) => (
-                  <div
-                    key={candidate.id}
-                    className={`${stageColors[candidate.stage]} border-l-4 p-3 mb-3 rounded shadow`}
-                  >
-                    <p className="font-semibold">{candidate.name}</p>
-                    <p>{candidate.stage}</p>
-                    <a
-                      href={candidate.linkedin_url}
-                      target="_blank"
-                      className="text-[#3fb950] text-sm"
+              );
+
+              return jobMatch || customerMatch || candidateMatch;
+            })
+            .map((job) => (
+              <div
+                onClick={() => viewCandidates(job.id)}
+                key={job.id}
+                className="candidateCard"
+              >
+                <h2>{job.title}</h2>
+                <h3>{job.customer?.name}</h3>
+
+                {candidates
+                  .filter((c) => c.job_id === job.id)
+                  .filter((c) =>
+                    c.name.toLowerCase().includes(search.toLowerCase()),
+                  )
+                  .map((candidate) => (
+                    <div
+                      key={candidate.id}
+                      className={`${stageColors[candidate.stage]} border-l-4 p-3 mb-3 rounded shadow`}
                     >
-                      LinkedIn
-                    </a>
-                  </div>
-                ))}
-            </div>
-          ))}
+                      <p className="font-semibold">{candidate.name}</p>
+                      <p>{candidate.stage}</p>
+                      <a
+                        href={candidate.linkedin_url}
+                        target="_blank"
+                        className="text-[#3fb950] text-sm"
+                      >
+                        LinkedIn
+                      </a>
+                    </div>
+                  ))}
+              </div>
+            ))}
+        </div>
       </div>
     </div>
   );

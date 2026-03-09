@@ -33,26 +33,28 @@ export default function CreateJob() {
   };
   return (
     <div className={loading ? "cursor-wait" : ""}>
-      <h1>Create Job</h1>
-      <input
-        type="text"
-        placeholder="Job Title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        className="border p-2 w-full mb-4"
-      />
-      <textarea
-        placeholder="Job Description"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-        className="border p-2 w-full mb-4"
-      ></textarea>
-      <button
-        onClick={() => handleCreateJob()}
-        className="bg-blue-500 text-white px-4 py-2"
-      >
-        Create Job
-      </button>
+      <div style={{ maxWidth: 400, margin: "50px auto" }}>
+        <h1>New job</h1>
+        <input
+          type="text"
+          placeholder="Job Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          className="border p-2 w-full mb-4"
+        />
+        <textarea
+          placeholder="Job Description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          className="border p-2 w-full mb-4"
+        ></textarea>
+        <button
+          onClick={() => handleCreateJob()}
+          className="bg-blue-500 text-white px-4 py-2"
+        >
+          Create Job
+        </button>
+      </div>
     </div>
   );
 }

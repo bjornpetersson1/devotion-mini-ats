@@ -47,50 +47,52 @@ export default function createCandidate() {
   };
   return (
     <div className={loading ? "cursor-wait" : ""}>
-      <h1>New candidate</h1>
-      <select
-        value={customerId}
-        onChange={(e) => setCustomerId(e.target.value)}
-      >
-        <option value="">Select customer</option>
+      <div style={{ maxWidth: 400, margin: "50px auto" }}>
+        <h1>New candidate</h1>
+        <select
+          value={customerId}
+          onChange={(e) => setCustomerId(e.target.value)}
+        >
+          <option value="">Select customer</option>
 
-        {customers.map((customer) => (
-          <option key={customer.id} value={customer.id}>
-            {customer.name}
-          </option>
-        ))}
-      </select>
-      <select value={jobId} onChange={(e) => setJobId(e.target.value)}>
-        <option value="">Select job</option>
+          {customers.map((customer) => (
+            <option key={customer.id} value={customer.id}>
+              {customer.name}
+            </option>
+          ))}
+        </select>
+        <select value={jobId} onChange={(e) => setJobId(e.target.value)}>
+          <option value="">Select job</option>
 
-        {jobs.map((job) => (
-          <option key={job.id} value={job.id}>
-            {job.title}
-          </option>
-        ))}
-      </select>
-      <input
-        type="text"
-        placeholder="Candidate Name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        className="border p-2 w-full mb-4"
-      />
+          {jobs.map((job) => (
+            <option key={job.id} value={job.id}>
+              {job.title}
+            </option>
+          ))}
+        </select>
+        <input
+          type="text"
+          placeholder="Candidate Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="border p-2 w-full mb-4"
+        />
 
-      <input
-        type="url"
-        placeholder="LinkedIn Profile"
-        value={linkedinUrl}
-        onChange={(e) => setLinkedinUrl(e.target.value)}
-        className="border p-2 w-full mb-4"
-      />
+        <input
+          type="url"
+          placeholder="LinkedIn Profile"
+          value={linkedinUrl}
+          onChange={(e) => setLinkedinUrl(e.target.value)}
+          className="border p-2 w-full mb-4"
+        />
 
-      <button
-        onClick={() => handleCreateCandidate()}
-        className="bg-blue-500 text-white px-4 py-2"
-      >
-        Create Candidate
-      </button>
+        <button
+          onClick={() => handleCreateCandidate()}
+          className="bg-blue-500 text-white px-4 py-2"
+        >
+          Create Candidate
+        </button>
+      </div>
     </div>
   );
 }

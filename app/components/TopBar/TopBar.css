@@ -1,11 +1,12 @@
 .TopBar {
-  display: flex; /* Viktig: flex gör att barn ligger horisontellt */
-  align-items: center; /* Vertikal centering */
-  gap: 12px; /* Mellanrum mellan elementen */
+  display: flex;
+  align-items: center;
+  gap: 12px;
   padding: 10px 20px;
-  padding-bottom: 0;
-  background-color: #30363d; /* Om du vill ha samma mörka färg */
+  padding-bottom: 5px;
+  background-color: #30363d;
   color: white;
+  border-bottom: 1px solid #3fb950;
 }
 
 .TopBar button {

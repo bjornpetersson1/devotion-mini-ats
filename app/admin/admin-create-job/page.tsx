@@ -33,40 +33,42 @@ export default function CreateJob() {
   }, []);
   return (
     <div className={loading ? "cursor-wait" : ""}>
-      <h1>New job</h1>
-      <select
-        value={customerId}
-        onChange={(e) => setCustomerId(e.target.value)}
-        className="border p-2 w-full mb-4"
-      >
-        <option value="">Select Customer</option>
+      <div style={{ maxWidth: 400, margin: "50px auto" }}>
+        <h1>New job</h1>
+        <select
+          value={customerId}
+          onChange={(e) => setCustomerId(e.target.value)}
+          className="border p-2 w-full mb-4"
+        >
+          <option value="">Select Customer</option>
 
-        {customers.map((customer) => (
-          <option key={customer.id} value={customer.id}>
-            {customer.name}
-          </option>
-        ))}
-      </select>
+          {customers.map((customer) => (
+            <option key={customer.id} value={customer.id}>
+              {customer.name}
+            </option>
+          ))}
+        </select>
 
-      <input
-        type="text"
-        placeholder="Job Title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        className="border p-2 w-full mb-4"
-      />
-      <textarea
-        placeholder="Job Description"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-        className="border p-2 w-full mb-4"
-      ></textarea>
-      <button
-        onClick={() => handleCreateJob()}
-        className="bg-blue-500 text-white px-4 py-2"
-      >
-        Create Job
-      </button>
+        <input
+          type="text"
+          placeholder="Job Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          className="border p-2 w-full mb-4"
+        />
+        <textarea
+          placeholder="Job Description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          className="border p-2 w-full mb-4"
+        ></textarea>
+        <button
+          onClick={() => handleCreateJob()}
+          className="bg-blue-500 text-white px-4 py-2"
+        >
+          Create Job
+        </button>
+      </div>
     </div>
   );
 }

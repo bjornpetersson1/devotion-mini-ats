@@ -108,20 +108,26 @@ export default function JobKanban() {
     <div className={loading ? "cursor-wait" : ""}>
       <DndContext onDragEnd={handleDragEnd}>
         <h2 className="text-center text-3xl font-bold">{job?.title}</h2>
-        <div className="flex gap-2 overflow-x-auto p-6">
-          {stages.map((stage) => (
-            <DroppableStage key={stage} stage={stage} className="candidateCard">
-              {candidates
-                .filter((c) => c.stage === stage)
-                .map((c) => (
-                  <DraggableCandidate
-                    key={c.id}
-                    candidate={c}
-                    color={`${stageColors[c.stage]} border-l-4 p-3 mb-3 rounded shadow bg-[#30363d]`}
-                  />
-                ))}
-            </DroppableStage>
-          ))}
+        <div className="flex justify-center">
+          <div className="flex gap-2 overflow-x-auto p-6">
+            {stages.map((stage) => (
+              <DroppableStage
+                key={stage}
+                stage={stage}
+                className="candidateCard"
+              >
+                {candidates
+                  .filter((c) => c.stage === stage)
+                  .map((c) => (
+                    <DraggableCandidate
+                      key={c.id}
+                      candidate={c}
+                      color={`${stageColors[c.stage]} border-l-4 p-3 mb-3 rounded shadow bg-[#30363d]`}
+                    />
+                  ))}
+              </DroppableStage>
+            ))}
+          </div>
         </div>
         <p className="text-center ">{job?.description}</p>
       </DndContext>
