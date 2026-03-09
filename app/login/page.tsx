@@ -50,7 +50,8 @@ export default function LoginPage() {
 
   return (
     <div style={{ maxWidth: 400, margin: "50px auto" }}>
-      <h1>Login</h1>
+      <h1 className="text-center text-3xl font-bold">Mini-ATS</h1>
+      <h2>Login</h2>
       <input
         type="email"
         placeholder="Email"
