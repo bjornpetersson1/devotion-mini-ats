@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { loadKanban } from "../services/kanbanService";
 import { useRouter } from "next/navigation";
 import useAuthUser from "../services/userService";
-import { supabase } from "@/lib/supabase";
+import SearchBar from "../components/Searchbar";
+import { getCustomersByIds } from "../services/costumerService";
 
 export default function KanbanJobs() {
   const [loading, setLoading] = useState(false);
@@ -33,10 +34,7 @@ export default function KanbanJobs() {
       const customerIds = jobs
         .map((j) => j.customer_id)
         .filter((id) => id != null);
-      const { data: customers } = await supabase
-        .from("customers")
-        .select("*")
-        .in("id", customerIds);
+      const customers = await getCustomersByIds(customerIds);
       const jobsWithCustomer = jobs.map((job) => {
         const customer = customers?.find((c) => c.id === job.customer_id);
         return { ...job, customer };
@@ -50,15 +48,8 @@ export default function KanbanJobs() {
 
   return (
     <div className={loading ? "cursor-wait" : ""}>
-      <div className="mb-4">
-        <input
-          type="text"
-          placeholder="🔎 Search..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="border p-2 rounded w-full max-w-md mx-auto block"
-        />
-      </div>
+      <SearchBar search={search} setSearch={setSearch} />
+
       <div className="flex justify-center">
         <div className="flex gap-6 overflow-x-auto p-6 rounded-xl shadow-inner">
           {jobs

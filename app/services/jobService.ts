@@ -7,7 +7,6 @@ export async function loadJobs(user: any) {
     return [];
   }
 
-  // Hämta profilen
   const { data: profile, error: profileError } = await supabase
     .from("profiles")
     .select("id, role, customer_id")
@@ -22,7 +21,6 @@ export async function loadJobs(user: any) {
   console.log("Current profile:", profile);
 
   if (profile.role === "admin") {
-    // Admin ser alla jobb
     const { data: jobs, error } = await supabase.from("jobs").select("*");
     if (error) {
       console.error("Failed to fetch jobs:", error);
@@ -79,7 +77,6 @@ export async function getJobById(jobId: string) {
   return data;
 }
 
-
 export async function getJobsByCustomerId(CustomerId: string) {
   const { data } = await supabase
     .from("jobs")
@@ -91,4 +88,14 @@ export async function getJobsByCustomerId(CustomerId: string) {
   } else {
     return data;
   }
+}
+
+export async function getAllJobs() {
+  const { data, error } = await supabase.from("jobs").select("*");
+
+  if (error) {
+    console.error(error);
+    return [];
+  }
+  return data || [];
 }

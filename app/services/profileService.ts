@@ -35,7 +35,6 @@ export async function updateProfile(profile: {
 }) {
   const { id, ...updates } = profile;
 
-  //   await supabase.from("profiles").update(updates).eq("id", id);
   const { data, error } = await supabase
     .from("profiles")
     .update(updates)
@@ -43,7 +42,22 @@ export async function updateProfile(profile: {
 
   if (error) {
     console.error("Failed to update profile:", error.message);
-    throw error; // kasta vidare så frontend får veta det
+    throw error;
+  }
+
+  return data;
+}
+
+export async function getProfileByUser(user: any) {
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("customer_id, role")
+    .eq("id", user.id)
+    .single();
+
+  if (error) {
+    console.error(error);
+    return null;
   }
 
   return data;

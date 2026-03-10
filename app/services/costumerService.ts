@@ -1,9 +1,28 @@
 import { supabase } from "../../lib/supabase";
 
-export async function loadCustomers() {
-  const { data } = await supabase.from("customers").select("*");
-  console.log("Customers from DB:", data);
+export async function getAllCustomers() {
+  const { data, error } = await supabase.from("customers").select("*");
+
+  if (error) {
+    console.error(error);
+    return [];
+  }
+
   return data || [];
+}
+
+export async function getCustomersByIds(customerIds: string[]) {
+  const { data, error } = await supabase
+    .from("customers")
+    .select("*")
+    .in("id", customerIds);
+
+  if (error) {
+    console.error(error);
+    return [];
+  }
+
+  return data;
 }
 
 export async function insertCustomer(customer: { name: string }) {
@@ -19,8 +38,8 @@ export async function insertCustomer(customer: { name: string }) {
 
   return data;
 }
-export async function updateCustomer(customer: { id: string; name?: string }) {
-  const { id, ...updates } = customer;
+// export async function updateCustomer(customer: { id: string; name?: string }) {
+//   const { id, ...updates } = customer;
 
-  await supabase.from("customers").update(updates).eq("id", id);
-}
+//   await supabase.from("customers").update(updates).eq("id", id);
+// }

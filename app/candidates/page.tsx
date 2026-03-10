@@ -1,11 +1,18 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { supabase } from "@/lib/supabase";
 import useAuthUser from "@/app/services/userService";
 import { useRouter } from "next/navigation";
-import { deleteCandidate } from "../services/candidateService";
+import {
+  deleteCandidate,
+  getCandidates,
+  saveNote,
+} from "../services/candidateService";
 import { editCandidate } from "../services/candidateService";
+import SearchBar from "../components/Searchbar";
+import { getAllJobs } from "../services/jobService";
+import { getAllCustomers } from "../services/costumerService";
+import { getProfileByUser } from "../services/profileService";
 
 export default function ActiveCandidates() {
   const user = useAuthUser();
@@ -54,52 +61,26 @@ export default function ActiveCandidates() {
   }, [user]);
 
   async function fetchCandidates() {
-    const { data, error } = await supabase
-      .from("candidates")
-      .select("*")
-      .order("created_at", { ascending: false });
-
-    if (error) {
-      console.error(error);
-      return;
-    }
+    const data = await getCandidates();
 
     setAllCandidates(data);
   }
 
   async function fetchJobs() {
-    const { data, error } = await supabase.from("jobs").select("*");
-
-    if (error) {
-      console.error(error);
-      return;
-    }
+    const data = await getAllJobs();
 
     setJobs(data);
   }
 
   async function fetchCustomers() {
-    const { data, error } = await supabase.from("customers").select("*");
-
-    if (error) {
-      console.error(error);
-      return;
-    }
-
+    const data = await getAllCustomers();
     setCustomers(data);
   }
 
   async function fetchProfile() {
-    const { data, error } = await supabase
-      .from("profiles")
-      .select("customer_id")
-      .eq("id", user.id)
-      .single();
+    const data = await getProfileByUser(user);
 
-    if (error) {
-      console.error(error);
-      return;
-    }
+    if (!data) return;
 
     setCustomerId(data.customer_id);
   }
@@ -159,20 +140,15 @@ export default function ActiveCandidates() {
     setEditLinkedin(candidate.linkedin_url);
   }
 
-  async function saveNote(candidateId: string) {
-    const { error } = await supabase
-      .from("candidates")
-      .update({ note })
-      .eq("id", candidateId);
+  async function handleSaveNote(candidateId: string, note: string) {
+    await saveNote(candidateId, note);
 
-    if (error) {
-      console.error(error);
-      return;
-    }
+    setAllCandidates((prev) =>
+      prev.map((c) => (c.id === candidateId ? { ...c, note } : c)),
+    );
 
     setActiveCandidate(null);
     setNote("");
-    fetchCandidates();
   }
 
   async function handleDeleteCandidate(candidateId: string) {
@@ -197,15 +173,7 @@ export default function ActiveCandidates() {
 
   return (
     <div className="p-10">
-      <div className="mb-4">
-        <input
-          type="text"
-          placeholder="🔎 Search..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="border p-2 rounded w-full max-w-md mx-auto block"
-        />
-      </div>
+      <SearchBar search={search} setSearch={setSearch} />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {filteredCandidates.map((candidate) => {
@@ -303,7 +271,9 @@ export default function ActiveCandidates() {
 
                   <br />
 
-                  <button onClick={() => saveNote(candidate.id)}>Save</button>
+                  <button onClick={() => handleSaveNote(candidate.id, note)}>
+                    Save
+                  </button>
 
                   <button onClick={() => setActiveCandidate(null)}>
                     Cancel

@@ -4,7 +4,6 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { loadKanban, updateCandidateStage } from "../../services/kanbanService";
 import { DndContext, useDraggable, useDroppable } from "@dnd-kit/core";
-import getCurrentUser from "@/app/services/userService";
 import useAuthUser from "@/app/services/userService";
 import { getJobById } from "@/app/services/jobService";
 

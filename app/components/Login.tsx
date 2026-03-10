@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
+import { logIn } from "../services/userService";
+import { getProfileByUser } from "../services/profileService";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -11,36 +13,17 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
 
-  const login = async () => {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+  const handleLogIn = async () => {
+    const data = await logIn(email, password, setErrorMsg);
+    const profile = await getProfileByUser(data);
 
-    if (error) {
-      setErrorMsg(error.message);
-      console.error("Login error:", error.message);
-      return;
-    }
-
-    const user = data.user;
-    console.log("User logged in:", user);
-
-    const { data: profile, error: profileError } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("id", user.id)
-      .single();
-
-    if (profileError) {
-      console.error("Profile fetch error:", profileError.message);
+    if (!profile) {
       setErrorMsg("Could not fetch profile, consider createing one.");
       return;
     }
 
-    console.log("User profile:", profile);
-
     localStorage.setItem("userProfile", JSON.stringify(profile));
+
     if (profile.role === "admin") {
       router.push("/admin");
     } else {
@@ -66,7 +49,7 @@ export default function LoginPage() {
         onChange={(e) => setPassword(e.target.value)}
         style={{ display: "block", width: "100%", marginBottom: 10 }}
       />
-      <button onClick={login} style={{ width: "100%" }}>
+      <button onClick={handleLogIn} style={{ width: "100%" }}>
         Login
       </button>
       {errorMsg && <p style={{ color: "red" }}>{errorMsg}</p>}

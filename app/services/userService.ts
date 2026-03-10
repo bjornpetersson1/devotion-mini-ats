@@ -5,12 +5,10 @@ export default function useAuthUser() {
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
-    // Hämta initialt
     const session = supabase.auth.getSession().then(({ data }) => {
       setUser(data.session?.user ?? null);
     });
 
-    // Lyssna på förändringar
     const { data: listener } = supabase.auth.onAuthStateChange(
       (_event, session) => {
         setUser(session?.user ?? null);
@@ -28,7 +26,7 @@ export default function useAuthUser() {
 export async function getCurrentProfile(user: any) {
   if (!user) {
     console.warn("No user logged in");
-    return null; // returnera null om ingen inloggad
+    return null;
   }
   const { data: profile, error: profileError } = await supabase
     .from("profiles")
@@ -47,4 +45,26 @@ export async function getCurrentCostumer(profile: any) {
     .single();
 
   return costumer;
+}
+
+export async function logIn(
+  email: string,
+  password: string,
+  setErrorMsg: (message: string) => void,
+) {
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+
+  if (error) {
+    setErrorMsg(error.message);
+    console.error("Login error:", error.message);
+    return;
+  }
+
+  const user = data.user;
+  console.log("User logged in:", user);
+
+  return user;
 }

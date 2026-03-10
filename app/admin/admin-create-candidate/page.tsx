@@ -2,8 +2,7 @@
 import { use, useEffect, useState } from "react";
 import { insertCandidate } from "../../services/candidateService";
 import { getJobsByCustomerId, loadJobs } from "../../services/jobService";
-import useAuthUser from "../../services/userService";
-import { loadCustomers } from "@/app/services/costumerService";
+import { getAllCustomers } from "@/app/services/costumerService";
 import { useRouter } from "next/navigation";
 
 export default function createCandidate() {
@@ -20,7 +19,7 @@ export default function createCandidate() {
   useEffect(() => {
     async function fetchCustomers() {
       setLoading(true);
-      const data = await loadCustomers();
+      const data = await getAllCustomers();
       setCustomers(data);
     }
     fetchCustomers().then(() => setLoading(false));

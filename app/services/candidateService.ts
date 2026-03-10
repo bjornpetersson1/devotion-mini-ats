@@ -1,7 +1,15 @@
 import { supabase } from "../../lib/supabase";
 
-export async function loadCandidates() {
-  const { data } = await supabase.from("candidates").select("*");
+export async function getCandidates() {
+  const { data, error } = await supabase
+    .from("candidates")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error(error);
+    return [];
+  }
   return data || [];
 }
 
@@ -61,11 +69,23 @@ export async function editCandidate(candidateId: string, updates: any) {
   return data;
 }
 
-export async function updateCandidateNote(id: string, note: string) {
+export async function saveNote(candidateId: string, note: string) {
   const { error } = await supabase
     .from("candidates")
     .update({ note })
-    .eq("id", id);
+    .eq("id", candidateId);
 
-  if (error) throw error;
+  if (error) {
+    console.error(error);
+    return;
+  }
 }
+
+// export async function updateCandidateNote(id: string, note: string) {
+//   const { error } = await supabase
+//     .from("candidates")
+//     .update({ note })
+//     .eq("id", id);
+
+//   if (error) throw error;
+// }

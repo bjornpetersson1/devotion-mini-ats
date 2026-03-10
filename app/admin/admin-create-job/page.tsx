@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { insertJob } from "../../services/jobService";
-import { loadCustomers } from "../../services/costumerService";
+import { getAllCustomers } from "../../services/costumerService";
 import { useRouter } from "next/navigation";
 
 export default function CreateJob() {
@@ -26,7 +26,7 @@ export default function CreateJob() {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      const customers = await loadCustomers();
+      const customers = await getAllCustomers();
       setCustomers(customers);
     };
     fetchData().then(() => setLoading(false));
