@@ -4,6 +4,8 @@ import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import useAuthUser from "@/app/services/userService";
 import { useRouter } from "next/navigation";
+import { deleteCandidate } from "../services/candidateService";
+import { editCandidate } from "../services/candidateService";
 
 export default function ActiveCandidates() {
   const user = useAuthUser();
@@ -12,6 +14,10 @@ export default function ActiveCandidates() {
   const [jobs, setJobs] = useState<any[]>([]);
   const [customers, setCustomers] = useState<any[]>([]);
   const [customerId, setCustomerId] = useState<string | null>(null);
+  const [editingCandidate, setEditingCandidate] = useState<string | null>(null);
+  const [editName, setEditName] = useState("");
+  const [editStage, setEditStage] = useState("");
+  const [editLinkedin, setEditLinkedin] = useState("");
 
   const [activeCandidate, setActiveCandidate] = useState<string | null>(null);
   const [note, setNote] = useState("");
@@ -131,6 +137,28 @@ export default function ActiveCandidates() {
     return candidateMatch || jobMatch || customerMatch;
   });
 
+  async function handleEditCandidate(candidateId: string) {
+    const updated = await editCandidate(candidateId, {
+      name: editName,
+      stage: editStage,
+      linkedin_url: editLinkedin,
+    });
+
+    setAllCandidates((prev) =>
+      prev.map((c) => (c.id === candidateId ? updated : c)),
+    );
+
+    setEditingCandidate(null);
+    setEditName("");
+  }
+
+  function startEdit(candidate: any) {
+    setEditingCandidate(candidate.id);
+    setEditName(candidate.name);
+    setEditStage(candidate.stage);
+    setEditLinkedin(candidate.linkedin_url);
+  }
+
   async function saveNote(candidateId: string) {
     const { error } = await supabase
       .from("candidates")
@@ -145,6 +173,26 @@ export default function ActiveCandidates() {
     setActiveCandidate(null);
     setNote("");
     fetchCandidates();
+  }
+
+  async function handleDeleteCandidate(candidateId: string) {
+    const confirmed = confirm("Delete this candidate?");
+
+    if (!confirmed) return;
+
+    await deleteCandidate(candidateId);
+
+    setAllCandidates((prev) =>
+      prev.filter((candidate) => candidate.id !== candidateId),
+    );
+  }
+
+  async function handleStageUpdate(candidateId: string, stage: string) {
+    const updatedCandidate = await editCandidate(candidateId, { stage });
+    setAllCandidates((prev) =>
+      prev.map((c) => (c.id === candidateId ? updatedCandidate : c)),
+    );
+    setEditStage(stage);
   }
 
   return (
@@ -169,21 +217,69 @@ export default function ActiveCandidates() {
               key={candidate.id}
               className={`${stageColors[candidate.stage]} border-l-4 p-3 mb-3 rounded shadow`}
             >
-              <h3 onClick={() => viewJob(job.id)}>{candidate.name}</h3>
+              {editingCandidate !== candidate.id ? (
+                <h3 onClick={() => viewJob(job.id)}>{candidate.name}</h3>
+              ) : (
+                <>
+                  <input
+                    value={editName}
+                    onChange={(e) => setEditName(e.target.value)}
+                    className="border p-1"
+                  />
+                </>
+              )}
 
               <h4>{customer?.name || ""}</h4>
 
               <p>{job?.title || ""}</p>
 
-              <h5 className={textColors[candidate.stage]}>{candidate.stage}</h5>
+              {editingCandidate !== candidate.id ? (
+                <h5 className={textColors[candidate.stage]}>
+                  {candidate.stage}
+                </h5>
+              ) : (
+                <select
+                  value={
+                    allCandidates.find((c) => c.id === candidate.id)?.stage ||
+                    candidate.stage
+                  }
+                  onChange={(e) =>
+                    handleStageUpdate(candidate.id, e.target.value)
+                  }
+                >
+                  <option value="applied">Applied</option>
+                  <option value="screening">Screening</option>
+                  <option value="interview">Interview</option>
+                  <option value="offer">Offer</option>
+                  <option value="hired">Hired</option>
+                  <option value="rejected">Rejected</option>
+                </select>
+              )}
 
-              <a
-                href={candidate.linkedin_url}
-                target="_blank"
-                className="text-[#3fb950] text-sm"
-              >
-                LinkedIn
-              </a>
+              {editingCandidate !== candidate.id ? (
+                <a
+                  href={candidate.linkedin_url}
+                  target="_blank"
+                  className="text-[#3fb950] text-sm"
+                >
+                  LinkedIn
+                </a>
+              ) : (
+                <>
+                  <input
+                    value={editLinkedin}
+                    onChange={(e) => setEditLinkedin(e.target.value)}
+                    className="border p-1"
+                  />
+                  <button onClick={() => handleEditCandidate(candidate.id)}>
+                    Save
+                  </button>
+
+                  <button onClick={() => setEditingCandidate(null)}>
+                    Cancel
+                  </button>
+                </>
+              )}
 
               <br />
 
@@ -214,6 +310,13 @@ export default function ActiveCandidates() {
                   </button>
                 </div>
               )}
+
+              <div className="flex justify-center">
+                <button onClick={() => startEdit(candidate)}>Edit</button>
+                <button onClick={() => handleDeleteCandidate(candidate.id)}>
+                  Delete
+                </button>
+              </div>
             </div>
           );
         })}

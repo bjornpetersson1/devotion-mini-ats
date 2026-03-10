@@ -5,6 +5,19 @@ export async function loadCandidates() {
   return data || [];
 }
 
+export async function deleteCandidate(candidateId: string) {
+  const { data, error } = await supabase
+    .from("candidates")
+    .delete()
+    .eq("id", candidateId);
+
+  if (error) {
+    console.error(error);
+  }
+
+  return data;
+}
+
 export async function insertCandidate(candidate: {
   name: string;
   //email: string;
@@ -31,6 +44,21 @@ export async function updateCandidate(candidate: {
   const { id, ...updates } = candidate;
 
   await supabase.from("candidates").update(updates).eq("id", id);
+}
+export async function editCandidate(candidateId: string, updates: any) {
+  const { data, error } = await supabase
+    .from("candidates")
+    .update(updates)
+    .eq("id", candidateId)
+    .select()
+    .single();
+
+  if (error) {
+    console.error(error);
+    throw error;
+  }
+
+  return data;
 }
 
 export async function updateCandidateNote(id: string, note: string) {
