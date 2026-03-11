@@ -187,7 +187,12 @@ export default function ActiveCandidates() {
             >
               {editingCandidate !== candidate.id ? (
                 <>
-                  <h3 onClick={() => viewJob(job.id)}>{candidate.name}</h3>
+                  <h3
+                    onClick={() => viewJob(job.id)}
+                    className="cursor-pointer"
+                  >
+                    {candidate.name}
+                  </h3>
                   <h4>{customer?.name || ""}</h4>
 
                   <p>{job?.title || ""}</p>

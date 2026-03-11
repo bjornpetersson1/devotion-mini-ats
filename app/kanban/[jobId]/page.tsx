@@ -134,7 +134,7 @@ export default function JobKanban() {
               setEditNameMode(true);
               setJobName(job?.title);
             }}
-            className="text-center text-3xl font-bold"
+            className="text-center text-3xl font-bold cursor-pointer"
           >
             {job?.title}
           </h2>
@@ -187,7 +187,7 @@ export default function JobKanban() {
               setEditDescriptionMode(true);
               setJobDescription(job?.description);
             }}
-            className="text-center"
+            className="text-center cursor-pointer"
           >
             {job?.description}
           </p>
