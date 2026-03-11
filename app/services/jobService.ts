@@ -99,3 +99,14 @@ export async function getAllJobs() {
   }
   return data || [];
 }
+
+export async function updateJobById(job: {
+  id: string;
+  customer_id?: string;
+  title?: string;
+  description?: string;
+}) {
+  const { id, ...updates } = job;
+
+  await supabase.from("jobs").update(updates).eq("id", id);
+}
