@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabase";
 import { logIn } from "../services/userService";
 import { getProfileByUser } from "../services/profileService";
 
