@@ -201,38 +201,41 @@ export default function ActiveCandidates() {
                   >
                     LinkedIn
                   </a>
-                  <button onClick={() => setActiveCandidate(candidate.id)}>
-                    Add note
-                  </button>
-
-                  {activeCandidate === candidate.id && (
-                    <div style={{ marginTop: "10px" }}>
-                      <textarea
-                        value={note}
-                        onChange={(e) => setNote(e.target.value)}
-                        placeholder="Write note..."
-                      />
-
-                      <br />
-
-                      <button
-                        onClick={() => handleSaveNote(candidate.id, note)}
-                      >
-                        Save
-                      </button>
-
-                      <button onClick={() => setActiveCandidate(null)}>
-                        Cancel
-                      </button>
-                    </div>
-                  )}
-                  <br />
-
-                  {candidate.note && (
-                    <p>
-                      <b>Note:</b> {candidate.note}
+                  {activeCandidate !== candidate.id && (
+                    <p
+                      onDoubleClick={() => {
+                        setActiveCandidate(candidate.id);
+                        setNote(candidate.note || "");
+                      }}
+                      className={`cursor-pointer ${!candidate.note ? "text-gray-400 italic" : ""}`}
+                    >
+                      <b>Note:</b>{" "}
+                      {candidate.note
+                        ? candidate.note
+                        : "Double click to add note"}
                     </p>
                   )}
+                  {activeCandidate === candidate.id && (
+                    <textarea
+                      value={note}
+                      onChange={(e) => setNote(e.target.value)}
+                      onBlur={() => handleSaveNote(candidate.id, note)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" && !e.shiftKey) {
+                          e.preventDefault();
+                          handleSaveNote(candidate.id, note);
+                        }
+
+                        if (e.key === "Escape") {
+                          setActiveCandidate(null);
+                          setNote("");
+                        }
+                      }}
+                      autoFocus
+                      className="border p-2 w-full"
+                    />
+                  )}
+                  <br />
 
                   <div className="flex justify-center">
                     <button onClick={() => startEdit(candidate)}>Edit</button>
