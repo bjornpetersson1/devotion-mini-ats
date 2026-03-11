@@ -186,7 +186,61 @@ export default function ActiveCandidates() {
               className={`${stageColors[candidate.stage]} border-l-4 p-3 mb-3 rounded shadow`}
             >
               {editingCandidate !== candidate.id ? (
-                <h3 onClick={() => viewJob(job.id)}>{candidate.name}</h3>
+                <>
+                  <h3 onClick={() => viewJob(job.id)}>{candidate.name}</h3>
+                  <h4>{customer?.name || ""}</h4>
+
+                  <p>{job?.title || ""}</p>
+                  <h5 className={textColors[candidate.stage]}>
+                    {candidate.stage}
+                  </h5>
+                  <a
+                    href={candidate.linkedin_url}
+                    target="_blank"
+                    className="text-[#3fb950] text-sm"
+                  >
+                    LinkedIn
+                  </a>
+                  <button onClick={() => setActiveCandidate(candidate.id)}>
+                    Add note
+                  </button>
+
+                  {activeCandidate === candidate.id && (
+                    <div style={{ marginTop: "10px" }}>
+                      <textarea
+                        value={note}
+                        onChange={(e) => setNote(e.target.value)}
+                        placeholder="Write note..."
+                      />
+
+                      <br />
+
+                      <button
+                        onClick={() => handleSaveNote(candidate.id, note)}
+                      >
+                        Save
+                      </button>
+
+                      <button onClick={() => setActiveCandidate(null)}>
+                        Cancel
+                      </button>
+                    </div>
+                  )}
+                  <br />
+
+                  {candidate.note && (
+                    <p>
+                      <b>Note:</b> {candidate.note}
+                    </p>
+                  )}
+
+                  <div className="flex justify-center">
+                    <button onClick={() => startEdit(candidate)}>Edit</button>
+                    <button onClick={() => handleDeleteCandidate(candidate.id)}>
+                      Delete
+                    </button>
+                  </div>
+                </>
               ) : (
                 <>
                   <input
@@ -194,46 +248,22 @@ export default function ActiveCandidates() {
                     onChange={(e) => setEditName(e.target.value)}
                     className="border p-1"
                   />
-                </>
-              )}
-
-              <h4>{customer?.name || ""}</h4>
-
-              <p>{job?.title || ""}</p>
-
-              {editingCandidate !== candidate.id ? (
-                <h5 className={textColors[candidate.stage]}>
-                  {candidate.stage}
-                </h5>
-              ) : (
-                <select
-                  value={
-                    allCandidates.find((c) => c.id === candidate.id)?.stage ||
-                    candidate.stage
-                  }
-                  onChange={(e) =>
-                    handleStageUpdate(candidate.id, e.target.value)
-                  }
-                >
-                  <option value="applied">Applied</option>
-                  <option value="screening">Screening</option>
-                  <option value="interview">Interview</option>
-                  <option value="offer">Offer</option>
-                  <option value="hired">Hired</option>
-                  <option value="rejected">Rejected</option>
-                </select>
-              )}
-
-              {editingCandidate !== candidate.id ? (
-                <a
-                  href={candidate.linkedin_url}
-                  target="_blank"
-                  className="text-[#3fb950] text-sm"
-                >
-                  LinkedIn
-                </a>
-              ) : (
-                <>
+                  <select
+                    value={
+                      allCandidates.find((c) => c.id === candidate.id)?.stage ||
+                      candidate.stage
+                    }
+                    onChange={(e) =>
+                      handleStageUpdate(candidate.id, e.target.value)
+                    }
+                  >
+                    <option value="applied">Applied</option>
+                    <option value="screening">Screening</option>
+                    <option value="interview">Interview</option>
+                    <option value="offer">Offer</option>
+                    <option value="hired">Hired</option>
+                    <option value="rejected">Rejected</option>
+                  </select>
                   <input
                     value={editLinkedin}
                     onChange={(e) => setEditLinkedin(e.target.value)}
@@ -248,45 +278,6 @@ export default function ActiveCandidates() {
                   </button>
                 </>
               )}
-
-              <br />
-
-              {candidate.note && (
-                <p>
-                  <b>Note:</b> {candidate.note}
-                </p>
-              )}
-
-              <button onClick={() => setActiveCandidate(candidate.id)}>
-                Add note
-              </button>
-
-              {activeCandidate === candidate.id && (
-                <div style={{ marginTop: "10px" }}>
-                  <textarea
-                    value={note}
-                    onChange={(e) => setNote(e.target.value)}
-                    placeholder="Write note..."
-                  />
-
-                  <br />
-
-                  <button onClick={() => handleSaveNote(candidate.id, note)}>
-                    Save
-                  </button>
-
-                  <button onClick={() => setActiveCandidate(null)}>
-                    Cancel
-                  </button>
-                </div>
-              )}
-
-              <div className="flex justify-center">
-                <button onClick={() => startEdit(candidate)}>Edit</button>
-                <button onClick={() => handleDeleteCandidate(candidate.id)}>
-                  Delete
-                </button>
-              </div>
             </div>
           );
         })}
