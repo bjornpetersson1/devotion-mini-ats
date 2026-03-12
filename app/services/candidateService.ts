@@ -28,7 +28,6 @@ export async function deleteCandidate(candidateId: string) {
 
 export async function insertCandidate(candidate: {
   name: string;
-  //email: string;
   linkedin_url: string;
   job_id: string;
 }) {

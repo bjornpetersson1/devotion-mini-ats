@@ -56,7 +56,7 @@ export default function JobKanban() {
   const params = useParams();
   const jobId = params.jobId;
   const [candidates, setCandidates] = useState<any[]>([]);
-  const [job, setJob] = useState<any>(null);
+  const [job, setJob] = useState<Job>();
   const [editNameMode, setEditNameMode] = useState<boolean>(false);
   const [editDescriptionMode, setEditDescriptionMode] =
     useState<boolean>(false);
@@ -110,19 +110,27 @@ export default function JobKanban() {
 
   async function handleNewName(newName: string) {
     await updateJobById({ id: String(jobId), title: newName });
-    setJob((prev: any) => ({
-      ...prev,
-      title: newName,
-    }));
+    setJob((prev) =>
+      prev
+        ? {
+            ...prev,
+            title: newName,
+          }
+        : undefined,
+    );
     setEditNameMode(false);
   }
 
   async function handleNewDescription(newDescription: string) {
     await updateJobById({ id: String(jobId), description: newDescription });
-    setJob((prev: any) => ({
-      ...prev,
-      description: newDescription,
-    }));
+    setJob((prev) =>
+      prev
+        ? {
+            ...prev,
+            description: newDescription,
+          }
+        : undefined,
+    );
     setEditDescriptionMode(false);
   }
   return (
@@ -180,7 +188,6 @@ export default function JobKanban() {
             ))}
           </div>
         </div>
-        {/* <p className="text-center ">{job?.description}</p> */}
         {!editDescriptionMode && (
           <p
             onDoubleClick={() => {

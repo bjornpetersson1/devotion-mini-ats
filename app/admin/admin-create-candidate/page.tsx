@@ -1,5 +1,5 @@
 "use client";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { insertCandidate } from "../../services/candidateService";
 import { getJobsByCustomerId, loadJobs } from "../../services/jobService";
 import { getAllCustomers } from "@/app/services/costumerService";
@@ -9,7 +9,7 @@ export default function createCandidate() {
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
   const [linkedinUrl, setLinkedinUrl] = useState("");
-  const [jobs, setJobs] = useState<any[]>([]);
+  const [jobs, setJobs] = useState<Job[]>([]);
   const [jobId, setJobId] = useState("");
   const [customerId, setCustomerId] = useState("");
   const [customers, setCustomers] = useState<any[]>([]);

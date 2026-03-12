@@ -18,7 +18,7 @@ export default function ActiveCandidates() {
   const user = useAuthUser();
   const router = useRouter();
   const [allCandidates, setAllCandidates] = useState<any[]>([]);
-  const [jobs, setJobs] = useState<any[]>([]);
+  const [jobs, setJobs] = useState<Job[]>([]);
   const [customers, setCustomers] = useState<any[]>([]);
   const [customerId, setCustomerId] = useState<string | null>(null);
   const [editingCandidate, setEditingCandidate] = useState<string | null>(null);

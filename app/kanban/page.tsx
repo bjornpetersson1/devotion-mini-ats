@@ -10,7 +10,7 @@ import { getCustomersByIds } from "../services/costumerService";
 export default function KanbanJobs() {
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
-  const [jobs, setJobs] = useState<any[]>([]);
+  const [jobs, setJobs] = useState<JobWithCustomer[]>([]);
   const [candidates, setCandidates] = useState<any[]>([]);
   const router = useRouter();
   const user = useAuthUser();

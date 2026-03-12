@@ -10,7 +10,7 @@ export default function createCandidate() {
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
   const [linkedinUrl, setLinkedinUrl] = useState("");
-  const [jobs, setJobs] = useState<any[]>([]);
+  const [jobs, setJobs] = useState<Job[]>([]);
   const [jobId, setJobId] = useState("");
   const user = useAuthUser();
   useEffect(() => {

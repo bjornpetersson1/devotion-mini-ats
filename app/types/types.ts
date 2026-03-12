@@ -2,6 +2,10 @@ type Job = {
   id: string;
   title: string;
   description: string;
+  customer_id: string;
+};
+type JobWithCustomer = Job & {
+  customer?: Customer;
 };
 
 type Candidate = {

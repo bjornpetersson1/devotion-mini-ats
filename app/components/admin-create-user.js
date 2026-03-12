@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import { supabase } from "../../lib/supabase";
 import { insertCustomer } from "../services/costumerService";
 import { updateProfile } from "../services/profileService";
 import { useRouter } from "next/navigation";
@@ -9,7 +8,6 @@ export default function AdminCreateUser() {
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
   const [role, setRole] = useState("user");
   const router = useRouter();
 
@@ -28,7 +26,6 @@ export default function AdminCreateUser() {
       });
       const userData = await res.json();
       if (!userData.user) {
-        setMessage(userData.error || "Failed to create user");
         setLoading(false);
         return;
       }
@@ -43,11 +40,9 @@ export default function AdminCreateUser() {
         await updateProfile({ id: profileId, customer_id: customerId });
       }
 
-      setMessage("Customer and profile linked successfully!");
       setLoading(false);
     } catch (err) {
       console.error(err);
-      setMessage("Network or server error");
       setLoading(false);
     }
   };
