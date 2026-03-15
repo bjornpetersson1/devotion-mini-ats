@@ -4,6 +4,9 @@ import { insertCandidate } from "../../services/candidateService";
 import { getJobsByCustomerId, loadJobs } from "../../services/jobService";
 import { getAllCustomers } from "@/app/services/costumerService";
 import { useRouter } from "next/navigation";
+import useAuthUser from "@/app/services/userService";
+import { loadProfileById } from "@/app/services/profileService";
+import Unauthorized from "@/app/components/Unauthorized";
 
 export default function createCandidate() {
   const [loading, setLoading] = useState(false);
@@ -13,6 +16,17 @@ export default function createCandidate() {
   const [jobId, setJobId] = useState("");
   const [customerId, setCustomerId] = useState("");
   const [customers, setCustomers] = useState<any[]>([]);
+  const [role, setRole] = useState("customer");
+  const user = useAuthUser();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!user) return;
+      const profile = await loadProfileById(user.id);
+      setRole(profile?.role === "user" ? "Customer" : "Admin");
+    };
+    fetchData();
+  }, [user]);
 
   const router = useRouter();
 
@@ -44,54 +58,63 @@ export default function createCandidate() {
       setLoading(false);
     }
   };
-  return (
-    <div className={loading ? "cursor-wait" : ""}>
-      <div style={{ maxWidth: 400, margin: "50px auto" }}>
-        <h1>New candidate</h1>
-        <select
-          value={customerId}
-          onChange={(e) => setCustomerId(e.target.value)}
-        >
-          <option value="">Select customer</option>
 
-          {customers.map((customer) => (
-            <option key={customer.id} value={customer.id}>
-              {customer.name}
-            </option>
-          ))}
-        </select>
-        <select value={jobId} onChange={(e) => setJobId(e.target.value)}>
-          <option value="">Select job</option>
+  if (role === "Admin") {
+    return (
+      <div className={loading ? "cursor-wait" : ""}>
+        <div style={{ maxWidth: 400, margin: "50px auto" }}>
+          <h1>New candidate</h1>
+          <select
+            value={customerId}
+            onChange={(e) => setCustomerId(e.target.value)}
+          >
+            <option value="">Select customer</option>
 
-          {jobs.map((job) => (
-            <option key={job.id} value={job.id}>
-              {job.title}
-            </option>
-          ))}
-        </select>
-        <input
-          type="text"
-          placeholder="Candidate Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="border p-2 w-full mb-4"
-        />
+            {customers.map((customer) => (
+              <option key={customer.id} value={customer.id}>
+                {customer.name}
+              </option>
+            ))}
+          </select>
+          <select value={jobId} onChange={(e) => setJobId(e.target.value)}>
+            <option value="">Select job</option>
 
-        <input
-          type="url"
-          placeholder="LinkedIn Profile"
-          value={linkedinUrl}
-          onChange={(e) => setLinkedinUrl(e.target.value)}
-          className="border p-2 w-full mb-4"
-        />
+            {jobs.map((job) => (
+              <option key={job.id} value={job.id}>
+                {job.title}
+              </option>
+            ))}
+          </select>
+          <input
+            type="text"
+            placeholder="Candidate Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="border p-2 w-full mb-4"
+          />
 
-        <button
-          onClick={() => handleCreateCandidate()}
-          className="bg-blue-500 text-white px-4 py-2"
-        >
-          Create Candidate
-        </button>
+          <input
+            type="url"
+            placeholder="LinkedIn Profile"
+            value={linkedinUrl}
+            onChange={(e) => setLinkedinUrl(e.target.value)}
+            className="border p-2 w-full mb-4"
+          />
+
+          <button
+            onClick={() => handleCreateCandidate()}
+            className="bg-blue-500 text-white px-4 py-2"
+          >
+            Create Candidate
+          </button>
+        </div>
       </div>
-    </div>
-  );
+    );
+  } else {
+    return (
+      <>
+        <Unauthorized />
+      </>
+    );
+  }
 }
